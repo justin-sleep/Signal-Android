@@ -132,6 +132,11 @@
   <string name="ConversationActivity_unable_to_record_audio">Fejl ved lydoptagelse!</string>
   <string name="ConversationActivity_error_sending_voice_message">Der skete en fejl, da vi sendte voice besked.</string>
   <string name="ConversationActivity_there_is_no_app_available_to_handle_this_link_on_your_device">Der er ingen app, der kan åbne dette link på dit device.</string>
+  <!--ConversationAdapter-->
+  <plurals name="ConversationAdapter_n_unread_messages">
+    <item quantity="one">%d ulæst besked</item>
+    <item quantity="other">%d ulæste beskeder</item>
+  </plurals>
   <!--ConversationFragment-->
   <string name="ConversationFragment_message_details">Beskeddetaljer</string>
   <string name="ConversationFragment_transport_s_sent_received_s">Overførsel: %1$s\nSendt/Modtaget: %2$s</string>
@@ -222,6 +227,10 @@
   <string name="DeviceListItem_linked_s">Tilkoblede %s</string>
   <string name="DeviceListItem_last_active_s">Sidste aktive %s</string>
   <string name="DeviceListItem_today">I dag</string>
+  <!--DocumentView-->
+  <!--DozeReminder-->
+  <string name="DozeReminder_optimize_for_missing_play_services">Optimer for manglende Play Services</string>
+  <string name="DozeReminder_this_device_does_not_support_play_services_tap_to_disable_system_battery">Denne enhed understøtter ikke Play Services. Tryk for at slå batterioptimeringer fra, som forhindrer Signal i at modtage beskeder i baggrunden.</string>
   <!--ShareActivity-->
   <string name="ShareActivity_share_with">Del med</string>
   <!--ExperienceUpgradeActivity-->
@@ -250,7 +259,7 @@
   <string name="GiphyFragmentPagerAdapter_stickers">Klistermærke</string>
   <!--GroupCreateActivity-->
   <string name="GroupCreateActivity_actionbar_title">Ny gruppe</string>
-  <string name="GroupCreateActivity_actionbar_update_title">Opdatér gruppe</string>
+  <string name="GroupCreateActivity_actionbar_edit_title">Rediger gruppe</string>
   <string name="GroupCreateActivity_group_name_hint">Gruppenavn</string>
   <string name="GroupCreateActivity_actionbar_mms_title">Ny MMS-gruppe</string>
   <string name="GroupCreateActivity_contacts_dont_support_push">Du har valgt en person der ikke understøtter Signal-grupper. Denne gruppe vil være en MMS-gruppe.</string>
@@ -259,7 +268,7 @@
   <string name="GroupCreateActivity_contacts_no_members">Der skal være mindst én person i gruppen!</string>
   <string name="GroupCreateActivity_contacts_invalid_number">En kontakt i gruppen har et nummer, der ikke kan læses. Ret nummeret eller fjern kontakten og prøv igen.</string>
   <string name="GroupCreateActivity_avatar_content_description">Gruppeikon</string>
-  <string name="GroupCreateActivity_menu_create_title">Opret gruppe</string>
+  <string name="GroupCreateActivity_menu_apply_button">Anvend</string>
   <string name="GroupCreateActivity_creating_group">Opretter %1$s...</string>
   <string name="GroupCreateActivity_updating_group">Opdaterer %1$s...</string>
   <string name="GroupCreateActivity_cannot_add_non_push_to_existing_group">Kunne ikke tilføje, da %1$s ikke er en Signal-bruger.</string>
@@ -320,6 +329,9 @@ vil det resultere i dupletter.</string>
   <!--MessageDetailsRecipient-->
   <string name="MessageDetailsRecipient_failed_to_send">Kunne ikke sende</string>
   <string name="MessageDetailsRecipient_new_safety_number">Nyt sikkerhedsnummer</string>
+  <!--MessageRetrievalService-->
+  <string name="MessageRetrievalService_signal">Signal</string>
+  <string name="MessageRetrievalService_background_connection_enabled">Baggrundsforbindelse aktiveret</string>
   <!--MmsDownloader-->
   <string name="MmsDownloader_error_storing_mms">Fejl ved lagring af MMS!</string>
   <string name="MmsDownloader_error_connecting_to_mms_provider">Der skete en fejl, i forsøget på at forbinde til MMS udbyder</string>
@@ -341,11 +353,9 @@ vil det resultere i dupletter.</string>
   <!--MessageRecord-->
   <string name="MessageRecord_message_encrypted_with_a_legacy_protocol_version_that_is_no_longer_supported">Modtog en besked krypteret med en ældre version af Signal, der ikke længere understøttes. Bed venligst afsenderen om at opgradere til den nyeste version og sende beskeden igen.</string>
   <string name="MessageRecord_left_group">Du har forladt gruppen.</string>
-  <string name="MessageRecord_updated_group">Opdaterede gruppen.</string>
   <string name="MessageRecord_s_called_you">%s har ringet til dig</string>
   <string name="MessageRecord_called_s">Ringede til %s</string>
   <string name="MessageRecord_missed_call_from">Mistet opkald fra %s</string>
-  <string name="MessageRecord_s_is_on_signal_say_hey">%s er på Signal, sig hej!</string>
   <string name="MessageRecord_you_set_disappearing_message_time_to_s">Beskeder sat til at forsvinde efter %1$s.</string>
   <string name="MessageRecord_s_set_disappearing_message_time_to_s">%1$s har sat beskeder til at forsvinde efter %2$s.</string>
   <string name="MessageRecord_your_safety_number_with_s_has_changed">Dit sikkerhedsnummer med %s er ændret</string>
@@ -437,17 +447,16 @@ telefonnummer
   <string name="RegistrationActivity_the_number_you_specified_s_is_invalid">Det nummer, du
 indtastede (%s) er ugyldigt.
 </string>
-  <string name="RegistrationActivity_unsupported">Ikke understøttet</string>
-  <string name="RegistrationActivity_sorry_this_device_is_not_supported_for_data_messaging">Beklager,
-denne enhed understøtter ikke meddelelser sendt over mobil data. Enheder som kører versioner af Android lavere
-end 4.0 kræver en Google-konto. Enheder, som kører versioner af Android 4.0 eller nyere, kræver
-ikke en Google-konto, men Play Store-appen skal være installeret.
-</string>
   <string name="RegistrationActivity_we_will_now_verify_that_the_following_number_is_associated_with_your_device_s">
 Dobbelttjek, at dette er dit nummer! Vi er ved at verificere det med en SMS.
 </string>
   <string name="RegistrationActivity_continue">Fortsæt</string>
   <string name="RegistrationActivity_edit">Redigér</string>
+  <string name="RegistrationActivity_missing_google_play_services">Mangler Google Play Services</string>
+  <string name="RegistrationActivity_this_device_is_missing_google_play_services">Denne enhed mangler Google Play Services. Du kan stadig bruge Signal, men denne konfiguration kan resultere i begrænset stabilitet og ydeevne.\n\nHvis du ikke er en superbruger, ikke kører en alternativ Android ROM eller tror du ser denne besked ved en fejl kan du kontakte support@whispersystems.org (på engelsk) for hjælp.</string>
+  <string name="RegistrationActivity_i_understand">Jeg forstår</string>
+  <string name="RegistrationActivity_play_services_error">Play Services fejl</string>
+  <string name="RegistrationActivity_google_play_services_is_updating_or_unavailable">Google Play Services bliver opdateret eller er midlertidigt utilgængelig. Prøv igen.</string>
   <!--RegistrationProblemsActivity-->
   <string name="RegistrationProblemsActivity_possible_problems">Mulige problemer</string>
   <!--RegistrationProgressActivity-->
@@ -470,7 +479,6 @@ Dobbelttjek, at dette er dit nummer! Vi er ved at verificere det med en SMS.
   <string name="RegistrationProgressActivity_too_many_requests">For mange anmodninger!</string>
   <string name="RegistrationProgressActivity_youve_already_requested_a_voice_call">Du har allerede anmodet om et opkald. Du kan anmode om et nyt om 20 minutter.</string>
   <string name="RegistrationProgressActivity_registration_conflict">Registreringskonflikt</string>
-  <string name="RegistrationProgressActivity_this_number_is_already_registered_on_a_different">Dette telefonnummer er allerede registreret på en anden Signal-server (CyanogenMod?). Du er nødt til at afregistrere der, før du kan registrere her.</string>
   <!--RegistrationService-->
   <string name="RegistrationService_registration_complete">Registrering fuldført</string>
   <string name="RegistrationService_signal_registration_has_successfully_completed">Signal-registrering lykkedes.</string>
@@ -499,9 +507,9 @@ Modtog en nøgle-besked for en ugyldig protokol-version.
   <string name="ThreadRecord_called_you">Ringede til dig</string>
   <string name="ThreadRecord_missed_call">Mistet opkald</string>
   <string name="ThreadRecord_media_message">Mediebesked</string>
-  <string name="ThreadRecord_s_is_on_signal_say_hey">%s er på Signal, sig hej!</string>
   <string name="ThreadRecord_disappearing_message_time_updated_to_s">Beskeder sat til at forsvinde efter %s</string>
   <string name="ThreadRecord_your_safety_number_with_s_has_changed">Dit identitestsnøgle med %s er ændret</string>
+  <!--UpdateApkReadyListener-->
   <!--VerifyIdentityActivity-->
   <string name="VerifyIdentityActivity_your_contact_is_running_an_old_version_of_signal">Din kontakt bruger en gammel version af Signal. Bed ham om at updatere inden I udveksler sikkerhedsnøgler</string>
   <string name="VerifyIdentityActivity_your_contact_is_running_a_newer_version_of_Signal">Din kontakt bruger en nyere version af Signal, med en inkompatibel QR kode. Du bliver nødt til at opdatere din app for at kunne sammenligne.</string>
@@ -544,6 +552,11 @@ Modtog en nøgle-besked for en ugyldig protokol-version.
   <string name="KeyCachingService_signal_passphrase_cached_with_lock">Tryk for at åbne, eller tryk på låsen for at lukke.</string>
   <string name="KeyCachingService_passphrase_cached">Signal er låst op</string>
   <string name="KeyCachingService_lock">Lås med et kodeord</string>
+  <!--MediaPreviewActivity-->
+  <string name="MediaPreviewActivity_you">Dig</string>
+  <string name="MediaPreviewActivity_cant_display">Kunne ikke forhåndsvise dette billede</string>
+  <string name="MediaPreviewActivity_unssuported_media_type">Ikke-understøttet multimedietype</string>
+  <string name="MediaPreviewActivity_draft">Kladde</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d nye beskeder i %2$d samtaler</string>
   <string name="MessageNotifier_most_recent_from_s">Seneste fra: %1$s</string>
@@ -557,14 +570,28 @@ Modtog en nøgle-besked for en ugyldig protokol-version.
   <string name="MessageNotifier_mark_read">Markér som læst</string>
   <string name="MessageNotifier_media_message">Multimediebesked</string>
   <string name="MessageNotifier_reply">Svar</string>
+  <!--MmsPreferencesFragment-->
+  <string name="MmsPreferencesFragment__manual_mms_settings_are_required">Din telefon kræver manuel indtastning af MMS-indstillinger.</string>
+  <string name="MmsPreferencesFragment__enabled">Aktiveret</string>
+  <string name="MmsPreferencesFragment__disabled">Deaktiveret</string>
+  <string name="MmsPreferencesFragment__not_set">Ikke indstillet</string>
+  <string name="MmsPreferencesFragment__invalid_uri">Den indtastede tekst er ikke en gyldig URI</string>
+  <string name="MmsPreferencesFragment__invalid_host">Den indtastede tekst er ikke en gyldig værtsmaskine</string>
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Hurtig-svar utilgængelig når Signal er låst!</string>
   <string name="QuickResponseService_problem_sending_message">Problem med at sende besked!</string>
+  <!--SaveAttachmentTask-->
   <!--SingleRecipientNotificationBuilder-->
   <string name="SingleRecipientNotificationBuilder_signal">Signal</string>
   <string name="SingleRecipientNotificationBuilder_new_message">Ny besked</string>
+  <!--VideoPlayer-->
+  <string name="VideoPlayer_error_playing_video">Kunne ikke afspille video</string>
   <!--WebRtcCallScreen-->
+  <string name="WebRtcCallScreen_new_safety_numbers">Sikkerhedsnummeret for samtalen med %1$s er ændret. Dette kan enten betyde at nogen prøver at opfange jeres kommunikation, eller at %2$s blot har geninstalleret Signal.</string>
+  <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Du bør verificere din sikkerhedsnøgle med denne kontakt</string>
+  <string name="WebRtcCallScreen_new_safety_number_title">Nyt sikkerhedsnummer</string>
   <!--WebRtcCallControls-->
+  <string name="WebRtcCallControls_tap_to_enable_your_video">Tryk for at aktivere video</string>
   <!--attachment_type_selector-->
   <string name="attachment_type_selector__image">Billede</string>
   <string name="attachment_type_selector__image_description">Billede</string>
@@ -682,6 +709,9 @@ Modtog en nøgle-besked for en ugyldig protokol-version.
   <string name="giphy_activity_toolbar__search_gifs_and_stickers">Søg i GIFs og klistermærker</string>
   <!--giphy_fragment-->
   <string name="giphy_fragment__nothing_found">Fandt ingenting</string>
+  <!--import_export_fragment-->
+  <string name="import_export_fragment__export">Eksportér</string>
+  <string name="import_export_fragment__import">Importér</string>
   <!--log_submit_activity-->
   <string name="log_submit_activity__log_fetch_failed">Kunne ikke tilgå loggen på din enhed. Du kan alternativt benytte ADB for at få en debug log.</string>
   <string name="log_submit_activity__thanks">Tak for hjælpen!</string>
@@ -708,23 +738,15 @@ Modtog en nøgle-besked for en ugyldig protokol-version.
   <!--load_more_header-->
   <string name="load_more_header__see_full_conversation">Se fuld samtale</string>
   <!--media_overview_activity-->
-  <string name="media_overview_activity__no_images">Ingen billeder</string>
+  <string name="media_overview_activity__no_media">Ingen mediefiler</string>
   <!--message_recipients_list_item-->
   <string name="message_recipients_list_item__verify">VERIFICÉR</string>
   <string name="message_recipients_list_item__resend">SEND IGEN</string>
-  <!--MmsPreferencesFragment-->
-  <string name="MmsPreferencesFragment__manual_mms_settings_are_required">Din telefon kræver manuel indtastning af MMS-indstillinger.</string>
-  <string name="MmsPreferencesFragment__enabled">Aktiveret</string>
-  <string name="MmsPreferencesFragment__disabled">Deaktiveret</string>
-  <string name="MmsPreferencesFragment__not_set">Ikke indstillet</string>
-  <string name="MmsPreferencesFragment__invalid_uri">Den indtastede tekst er ikke en gyldig URI</string>
-  <string name="MmsPreferencesFragment__invalid_host">Den indtastede tekst er ikke en gyldig værtsmaskine</string>
   <!--GroupUtil-->
   <plurals name="GroupUtil_joined_the_group">
     <item quantity="one">%1$s tilsluttede sig gruppen.</item>
     <item quantity="other">%1$s tilsluttede sig gruppen.</item>
   </plurals>
-  <string name="GroupUtil_group_updated">Gruppe opdateret.</string>
   <string name="GroupUtil_group_name_is_now">Gruppennavnet er nu \'%1$s\'.</string>
   <!--prompt_passphrase_activity-->
   <string name="prompt_passphrase_activity__unlock">Lås op</string>
@@ -756,7 +778,6 @@ Bekræft at dit telefonnummer er forbundet til Signal.</string>
 TELEFONNUMMER</string>
   <string name="registration_activity__phone_number">TELEFONNUMMER</string>
   <string name="registration_activity__register">Registrér</string>
-  <string name="registration_activity__registration_will_transmit_some_contact_information_to_the_server_temporariliy">Registrering sender nogle kontaktinformationer til serveren. De bliver ikke gemt.</string>
   <string name="registration_activity__powered_by_twilio">Drevet af twilio</string>
   <!--registration_problems-->
   <string name="registration_problems__some_possible_problems_include">Mulige problemer:</string>
@@ -802,7 +823,7 @@ mislykkedes.</string>
   <string name="recipients_panel__to"><small>Indtast navn eller nummer</small></string>
   <string name="recipients_panel__add_members">Tilføj medlem</string>
   <!--verify_display_fragment-->
-  <string name="verify_display_fragment__if_you_wish_to_verify_the_security_of_your_end_to_end_encryption_with_s"><![CDATA[Hvis du gerne vil verificere sikkerheden af din end-to-end kryptering med %s, så skal du sammenligne sikkerhedsnøglen ovenover med sikkerhedsnøglen på din enhed. Alternativ, så kan du skanne koden på hans mobil, og bede ham skanne koden på din mobil. <a href=\"https://whispersystems.org/redirect/safety-numbers\">Lær mere om at verificere sikkerhedsnøgler - på engelsk</a>]]></string>
+  <string name="verify_display_fragment__if_you_wish_to_verify_the_security_of_your_end_to_end_encryption_with_s"><![CDATA[Hvis du gerne vil verificere sikkerheden af din end-to-end kryptering med %s, så skal du sammenligne sikkerhedsnøglen ovenover med sikkerhedsnøglen på din enhed. Alternativ, så kan du skanne koden på hans mobil, og bede ham skanne koden på din mobil. <a href="https://whispersystems.org/redirect/safety-numbers">Lær mere om at verificere sikkerhedsnøgler - på engelsk</a>]]></string>
   <string name="verify_display_fragment__tap_to_scan">Tryk for at skanne</string>
   <!--verify_identity-->
   <string name="verify_identity__share_safety_number">Del sikkerhedsnøgle</string>
@@ -824,8 +845,8 @@ mislykkedes.</string>
   <string name="AndroidManifest__verify_safety_number">Verificer sikkerhedsnøgle</string>
   <string name="AndroidManifest__log_submit">Indsend fejlfindingslog</string>
   <string name="AndroidManifest__media_preview">Mediepreview</string>
-  <string name="AndroidManifest__media_overview">Alle billeder</string>
-  <string name="AndroidManifest__media_overview_named">Alle billeder med %1$s</string>
+  <string name="AndroidManifest__all_media">Alle mediefiler</string>
+  <string name="AndroidManifest__all_media_named">Alle mediefiler med %1$s</string>
   <string name="AndroidManifest__message_details">Besked-detaljer</string>
   <string name="AndroidManifest__linked_devices">Enheder</string>
   <string name="AndroidManifest__invite_friends">Invitér venner</string>
@@ -958,6 +979,10 @@ mislykkedes.</string>
   <string name="preferences_chats__message_trimming">Trimning af beskeder</string>
   <string name="preferences_advanced__use_system_emoji">Anvend systemets emoji</string>
   <string name="preferences_advanced__disable_signal_built_in_emoji_support">Deaktivér Signals indbyggede emoji-understøttelse</string>
+  <string name="preferences_advanced__video_calling_beta">Videokald beta</string>
+  <string name="preferences_advanced__enable_support_for_next_generation_video_and_voice_calls">Understøttelse for forbedrede video- og stemmeopkald hvis aktiveret af begge parter. Denne funktionalitet er i beta.</string>
+  <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Videresend alle opkald gennem Signal-serveren for at undgå at afsløre din IP-adresse for din kontakt. Dette vil give en dårligere signalkvalitet.</string>
+  <string name="preferences_advanced__always_relay_calls">Videresend altid opkald</string>
   <!--****************************************-->
   <!--menus-->
   <!--****************************************-->
@@ -1012,10 +1037,10 @@ mislykkedes.</string>
   <string name="conversation_unmuted__mute_notifications">Dæmp notifikationer</string>
   <!--conversation-->
   <string name="conversation__menu_add_attachment">Vedhæft fil</string>
-  <string name="conversation__menu_update_group">Opdatér gruppe</string>
+  <string name="conversation__menu_edit_group">Rediger gruppe</string>
   <string name="conversation__menu_leave_group">Forlad gruppe</string>
   <string name="conversation__menu_delete_thread">Slet samtale</string>
-  <string name="conversation__menu_view_media">Alle billeder</string>
+  <string name="conversation__menu_view_all_media">Alle mediefiler</string>
   <string name="conversation__menu_conversation_settings">Samtaleindstillinger</string>
   <!--conversation_popup-->
   <string name="conversation_popup__menu_expand_popup">Udvid popup</string>
@@ -1067,18 +1092,14 @@ mislykkedes.</string>
   <string name="reminder_header_share_text">Jo flere venner der bruger Signal, desto bedre bliver den.</string>
   <string name="reminder_header_share_button">DEL</string>
   <string name="reminder_header_close_button">LUK</string>
-  <!--MediaPreviewActivity-->
-  <string name="MediaPreviewActivity_you">Dig</string>
-  <string name="MediaPreviewActivity_cant_display">Kunne ikke forhåndsvise dette billede</string>
-  <string name="MediaPreviewActivity_unssuported_media_type">Ikke-understøttet multimedietype</string>
   <!--media_preview-->
   <string name="media_preview__save_title">Gem</string>
   <string name="media_preview__forward_title">Videresend besked</string>
-  <string name="media_preview__overview_title">Alle billeder</string>
+  <string name="media_preview__all_media_title">Alle mediefiler</string>
   <!--media_overview-->
   <string name="media_overview__save_all">Gem alle</string>
   <!--media_preview_activity-->
-  <string name="media_preview_activity__image_content_description">Billedpreview</string>
+  <string name="media_preview_activity__media_content_description">Mediepreview</string>
   <!--new_conversation_activity-->
   <string name="new_conversation_activity__refresh">Opdater</string>
   <!--redphone_audio_popup_menu-->

@@ -73,7 +73,11 @@ public class DatabaseFactory {
   private static final int MIGRATED_CONVERSATION_LIST_STATUS_VERSION       = 26;
   private static final int INTRODUCED_SUBSCRIPTION_ID_VERSION              = 27;
   private static final int INTRODUCED_EXPIRE_MESSAGES_VERSION              = 28;
-  private static final int DATABASE_VERSION                                = 28;
+  private static final int INTRODUCED_LAST_SEEN                            = 29;
+  private static final int INTRODUCED_DIGEST                               = 30;
+  private static final int INTRODUCED_NOTIFIED                             = 31;
+  private static final int INTRODUCED_DOCUMENTS                            = 32;
+  private static final int DATABASE_VERSION                                = 32;
 
   private static final String DATABASE_NAME    = "messages.db";
   private static final Object lock             = new Object();
@@ -86,7 +90,7 @@ public class DatabaseFactory {
   private final EncryptingSmsDatabase encryptingSms;
   private final MmsDatabase mms;
   private final AttachmentDatabase attachments;
-  private final ImageDatabase image;
+  private final MediaDatabase media;
   private final ThreadDatabase thread;
   private final CanonicalAddressDatabase address;
   private final MmsAddressDatabase mmsAddress;
@@ -135,8 +139,8 @@ public class DatabaseFactory {
     return getInstance(context).attachments;
   }
 
-  public static ImageDatabase getImageDatabase(Context context) {
-    return getInstance(context).image;
+  public static MediaDatabase getMediaDatabase(Context context) {
+    return getInstance(context).media;
   }
 
   public static MmsAddressDatabase getMmsAddressDatabase(Context context) {
@@ -173,7 +177,7 @@ public class DatabaseFactory {
     this.encryptingSms               = new EncryptingSmsDatabase(context, databaseHelper);
     this.mms                         = new MmsDatabase(context, databaseHelper);
     this.attachments                 = new AttachmentDatabase(context, databaseHelper);
-    this.image                       = new ImageDatabase(context, databaseHelper);
+    this.media                       = new MediaDatabase(context, databaseHelper);
     this.thread                      = new ThreadDatabase(context, databaseHelper);
     this.address                     = CanonicalAddressDatabase.getInstance(context);
     this.mmsAddress                  = new MmsAddressDatabase(context, databaseHelper);
@@ -385,7 +389,7 @@ public class DatabaseFactory {
 
               InputStream is;
 
-              if (encrypted) is = new DecryptingPartInputStream(dataFile, masterSecret);
+              if (encrypted) is = DecryptingPartInputStream.createFor(masterSecret, dataFile);
               else           is = new FileInputStream(dataFile);
 
               body = (body == null) ? Util.readFullyAsString(is) : body + " " + Util.readFullyAsString(is);
@@ -828,6 +832,30 @@ public class DatabaseFactory {
         db.execSQL("ALTER TABLE sms ADD COLUMN expire_started INTEGER DEFAULT 0");
         db.execSQL("ALTER TABLE mms ADD COLUMN expire_started INTEGER DEFAULT 0");
         db.execSQL("ALTER TABLE thread ADD COLUMN expires_in INTEGER DEFAULT 0");
+      }
+
+      if (oldVersion < INTRODUCED_LAST_SEEN) {
+        db.execSQL("ALTER TABLE thread ADD COLUMN last_seen INTEGER DEFAULT 0");
+      }
+
+      if (oldVersion < INTRODUCED_DIGEST) {
+        db.execSQL("ALTER TABLE part ADD COLUMN digest BLOB");
+        db.execSQL("ALTER TABLE groups ADD COLUMN avatar_digest BLOB");
+      }
+
+      if (oldVersion < INTRODUCED_NOTIFIED) {
+        db.execSQL("ALTER TABLE sms ADD COLUMN notified INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE mms ADD COLUMN notified INTEGER DEFAULT 0");
+
+        db.execSQL("DROP INDEX sms_read_and_thread_id_index");
+        db.execSQL("CREATE INDEX IF NOT EXISTS sms_read_and_notified_and_thread_id_index ON sms(read,notified,thread_id)");
+
+        db.execSQL("DROP INDEX mms_read_and_thread_id_index");
+        db.execSQL("CREATE INDEX IF NOT EXISTS mms_read_and_notified_and_thread_id_index ON mms(read,notified,thread_id)");
+      }
+
+      if (oldVersion < INTRODUCED_DOCUMENTS) {
+        db.execSQL("ALTER TABLE part ADD COLUMN file_name TEXT");
       }
 
       db.setTransactionSuccessful();

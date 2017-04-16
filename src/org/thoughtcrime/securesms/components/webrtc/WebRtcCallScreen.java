@@ -127,7 +127,7 @@ public class WebRtcCallScreen extends FrameLayout implements Recipient.Recipient
     setPersonInfo(personInfo);
 
     this.incomingCallOverlay.setActiveCall();
-    this.status.setText(R.string.WebRtcCallScreen_new_safety_numbers_title);
+    this.status.setText(R.string.WebRtcCallScreen_new_safety_number_title);
     this.untrustedIdentityContainer.setVisibility(View.VISIBLE);
     this.untrustedIdentityExplanation.setText(spannableString);
     this.untrustedIdentityExplanation.setMovementMethod(LinkMovementMethod.getInstance());
@@ -163,8 +163,12 @@ public class WebRtcCallScreen extends FrameLayout implements Recipient.Recipient
     this.controls.setVideoMuteButtonListener(listener);
   }
 
-  public void setAudioButtonListener(WebRtcCallControls.AudioButtonListener listener) {
-    this.controls.setAudioButtonListener(listener);
+  public void setSpeakerButtonListener(WebRtcCallControls.SpeakerButtonListener listener) {
+    this.controls.setSpeakerButtonListener(listener);
+  }
+
+  public void setBluetoothButtonListener(WebRtcCallControls.BluetoothButtonListener listener) {
+    this.controls.setBluetoothButtonListener(listener);
   }
 
   public void setHangupButtonListener(final HangupButtonListener listener) {
@@ -184,12 +188,13 @@ public class WebRtcCallScreen extends FrameLayout implements Recipient.Recipient
     this.cancelIdentityButton.setOnClickListener(listener);
   }
 
-  public void notifyBluetoothChange() {
-    this.controls.updateAudioButton();
+  public void updateAudioState(boolean isBluetoothAvailable, boolean isMicrophoneEnabled) {
+    this.controls.updateAudioState(isBluetoothAvailable);
+    this.controls.setMicrophoneEnabled(isMicrophoneEnabled);
   }
 
-  public void notifyAudioRoutingChange() {
-    this.controls.updateAudioButton();
+  public void setControlsEnabled(boolean enabled) {
+    this.controls.setControlsEnabled(enabled);
   }
 
   public void setLocalVideoEnabled(boolean enabled) {
@@ -335,7 +340,13 @@ public class WebRtcCallScreen extends FrameLayout implements Recipient.Recipient
       ViewCompat.animate(callHeader).translationY(0);
       ViewCompat.animate(status).alpha(1);
       ViewCompat.animate(endCallButton).translationY(0);
-      ViewCompat.animate(endCallButton).alpha(1);
+      ViewCompat.animate(endCallButton).alpha(1).withEndAction(new Runnable() {
+        @Override
+        public void run() {
+          // Note: This is to work around an Android bug, see #6225
+          endCallButton.requestLayout();
+        }
+      });
 
       this.minimized = false;
     }

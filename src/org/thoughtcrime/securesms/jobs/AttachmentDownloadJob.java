@@ -5,6 +5,7 @@ import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.AttachmentId;
 import org.thoughtcrime.securesms.crypto.AsymmetricMasterSecret;
@@ -18,9 +19,11 @@ import org.thoughtcrime.securesms.events.PartProgressEvent;
 import org.thoughtcrime.securesms.jobs.requirements.MasterSecretRequirement;
 import org.thoughtcrime.securesms.jobs.requirements.MediaNetworkRequirement;
 import org.thoughtcrime.securesms.notifications.MessageNotifier;
+import org.thoughtcrime.securesms.util.Hex;
 import org.whispersystems.jobqueue.JobParameters;
 import org.whispersystems.jobqueue.requirements.NetworkRequirement;
 import org.whispersystems.libsignal.InvalidMessageException;
+import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceMessageReceiver;
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment.ProgressListener;
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachmentPointer;
@@ -33,12 +36,12 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
-import de.greenrobot.event.EventBus;
 import ws.com.google.android.mms.MmsException;
 
 public class AttachmentDownloadJob extends MasterSecretJob implements InjectableType {
-  private static final long   serialVersionUID = 1L;
-  private static final String TAG              = AttachmentDownloadJob.class.getSimpleName();
+  private static final long   serialVersionUID    = 1L;
+  private static final int    MAX_ATTACHMENT_SIZE = 150 * 1024  * 1024;
+  private static final String TAG                  = AttachmentDownloadJob.class.getSimpleName();
 
   @Inject transient SignalServiceMessageReceiver messageReceiver;
 
@@ -67,7 +70,7 @@ public class AttachmentDownloadJob extends MasterSecretJob implements Injectable
   @Override
   public void onRun(MasterSecret masterSecret) throws IOException {
     final AttachmentId attachmentId = new AttachmentId(partRowId, partUniqueId);
-    final Attachment   attachment   = DatabaseFactory.getAttachmentDatabase(context).getAttachment(attachmentId);
+    final Attachment   attachment   = DatabaseFactory.getAttachmentDatabase(context).getAttachment(masterSecret, attachmentId);
 
     if (attachment == null) {
       Log.w(TAG, "attachment no longer exists.");
@@ -110,7 +113,7 @@ public class AttachmentDownloadJob extends MasterSecretJob implements Injectable
       attachmentFile = createTempFile();
 
       SignalServiceAttachmentPointer pointer = createAttachmentPointer(masterSecret, attachment);
-      InputStream                    stream  = messageReceiver.retrieveAttachment(pointer, attachmentFile, new ProgressListener() {
+      InputStream                    stream  = messageReceiver.retrieveAttachment(pointer, attachmentFile, MAX_ATTACHMENT_SIZE, new ProgressListener() {
         @Override
         public void onAttachmentProgress(long total, long progress) {
           EventBus.getDefault().postSticky(new PartProgressEvent(attachment, total, progress));
@@ -149,7 +152,13 @@ public class AttachmentDownloadJob extends MasterSecretJob implements Injectable
         relay = attachment.getRelay();
       }
 
-      return new SignalServiceAttachmentPointer(id, null, key, relay);
+      if (attachment.getDigest() != null) {
+        Log.w(TAG, "Downloading attachment with digest: " + Hex.toString(attachment.getDigest()));
+      } else {
+        Log.w(TAG, "Downloading attachment with no digest...");
+      }
+
+      return new SignalServiceAttachmentPointer(id, null, key, relay, Optional.fromNullable(attachment.getDigest()), Optional.fromNullable(attachment.getFileName()));
     } catch (InvalidMessageException | IOException e) {
       Log.w(TAG, e);
       throw new InvalidPartException(e);

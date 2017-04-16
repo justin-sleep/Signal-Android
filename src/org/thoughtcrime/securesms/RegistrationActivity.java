@@ -1,10 +1,10 @@
 package org.thoughtcrime.securesms;
 
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,13 +14,12 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.i18n.phonenumbers.AsYouTypeFormatter;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -44,13 +43,23 @@ public class RegistrationActivity extends BaseActionBarActivity {
   private static final int PICK_COUNTRY = 1;
   private static final String TAG = RegistrationActivity.class.getSimpleName();
 
+  private enum PlayServicesStatus {
+    SUCCESS,
+    MISSING,
+    NEEDS_UPDATE,
+    TRANSIENT_ERROR
+  }
+
   private AsYouTypeFormatter   countryFormatter;
   private ArrayAdapter<String> countrySpinnerAdapter;
   private Spinner              countrySpinner;
   private TextView             countryCode;
   private TextView             number;
-  private Button               createButton;
-  private Button               skipButton;
+  private TextView             createButton;
+  private TextView             skipButton;
+  private TextView             informationView;
+  private View                 informationToggle;
+  private TextView             informationToggleText;
 
   private MasterSecret masterSecret;
 
@@ -77,37 +86,29 @@ public class RegistrationActivity extends BaseActionBarActivity {
 
   private void initializeResources() {
     this.masterSecret   = getIntent().getParcelableExtra("master_secret");
-    this.countrySpinner = (Spinner)findViewById(R.id.country_spinner);
-    this.countryCode    = (TextView)findViewById(R.id.country_code);
-    this.number         = (TextView)findViewById(R.id.number);
-    this.createButton   = (Button)findViewById(R.id.registerButton);
-    this.skipButton     = (Button)findViewById(R.id.skipButton);
+    this.countrySpinner        = (Spinner) findViewById(R.id.country_spinner);
+    this.countryCode           = (TextView) findViewById(R.id.country_code);
+    this.number                = (TextView) findViewById(R.id.number);
+    this.createButton          = (TextView) findViewById(R.id.registerButton);
+    this.skipButton            = (TextView) findViewById(R.id.skipButton);
+    this.informationView       = (TextView) findViewById(R.id.registration_information);
+    this.informationToggle     =            findViewById(R.id.information_link_container);
+    this.informationToggleText = (TextView) findViewById(R.id.information_label);
+
+    DrawableCompat.setTint(this.createButton.getBackground(), getResources().getColor(R.color.signal_primary));
+    DrawableCompat.setTint(this.skipButton.getBackground(), getResources().getColor(R.color.grey_400));
 
     this.countryCode.addTextChangedListener(new CountryCodeChangedListener());
     this.number.addTextChangedListener(new NumberChangedListener());
     this.createButton.setOnClickListener(new CreateButtonListener());
     this.skipButton.setOnClickListener(new CancelButtonListener());
+    this.informationToggle.setOnClickListener(new InformationToggleListener());
 
     if (getIntent().getBooleanExtra("cancel_button", false)) {
       this.skipButton.setVisibility(View.VISIBLE);
     } else {
       this.skipButton.setVisibility(View.INVISIBLE);
     }
-
-    findViewById(R.id.twilio_shoutout).setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-        intent.setData(Uri.parse("https://twilio.com"));
-        try {
-          startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-          Log.w(TAG,e);
-        }
-      }
-    });
   }
 
   private void initializeSpinner() {
@@ -211,34 +212,80 @@ public class RegistrationActivity extends BaseActionBarActivity {
         return;
       }
 
-      int gcmStatus = GooglePlayServicesUtil.isGooglePlayServicesAvailable(self);
+      PlayServicesStatus gcmStatus = checkPlayServices(self);
 
-      if (gcmStatus != ConnectionResult.SUCCESS) {
-        if (GooglePlayServicesUtil.isUserRecoverableError(gcmStatus)) {
-          GooglePlayServicesUtil.getErrorDialog(gcmStatus, self, 9000).show();
-        } else {
-          Dialogs.showAlertDialog(self, getString(R.string.RegistrationActivity_unsupported),
-                                  getString(R.string.RegistrationActivity_sorry_this_device_is_not_supported_for_data_messaging));
-        }
-        return;
+      if (gcmStatus == PlayServicesStatus.SUCCESS) {
+        promptForRegistrationStart(self, e164number, true);
+      } else if (gcmStatus == PlayServicesStatus.MISSING) {
+        promptForNoPlayServices(self, e164number);
+      } else if (gcmStatus == PlayServicesStatus.NEEDS_UPDATE) {
+        GoogleApiAvailability.getInstance().getErrorDialog(self, ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED, 0).show();
+      } else {
+        Dialogs.showAlertDialog(self, getString(R.string.RegistrationActivity_play_services_error),
+                                getString(R.string.RegistrationActivity_google_play_services_is_updating_or_unavailable));
       }
+    }
 
-      AlertDialog.Builder dialog = new AlertDialog.Builder(self);
+    private void promptForRegistrationStart(final Context context, final String e164number, final boolean gcmSupported) {
+      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
       dialog.setTitle(PhoneNumberFormatter.getInternationalFormatFromE164(e164number));
       dialog.setMessage(R.string.RegistrationActivity_we_will_now_verify_that_the_following_number_is_associated_with_your_device_s);
       dialog.setPositiveButton(getString(R.string.RegistrationActivity_continue),
                                new DialogInterface.OnClickListener() {
                                  @Override
                                  public void onClick(DialogInterface dialog, int which) {
-                                   Intent intent = new Intent(self, RegistrationProgressActivity.class);
-                                   intent.putExtra("e164number", e164number);
-                                   intent.putExtra("master_secret", masterSecret);
+                                   Intent intent = new Intent(context, RegistrationProgressActivity.class);
+                                   intent.putExtra(RegistrationProgressActivity.NUMBER_EXTRA, e164number);
+                                   intent.putExtra(RegistrationProgressActivity.MASTER_SECRET_EXTRA, masterSecret);
+                                   intent.putExtra(RegistrationProgressActivity.GCM_SUPPORTED_EXTRA, gcmSupported);
                                    startActivity(intent);
                                    finish();
                                  }
                                });
       dialog.setNegativeButton(getString(R.string.RegistrationActivity_edit), null);
       dialog.show();
+    }
+
+    private void promptForNoPlayServices(final Context context, final String e164number) {
+      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+      dialog.setTitle(R.string.RegistrationActivity_missing_google_play_services);
+      dialog.setMessage(R.string.RegistrationActivity_this_device_is_missing_google_play_services);
+      dialog.setPositiveButton(R.string.RegistrationActivity_i_understand, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          promptForRegistrationStart(context, e164number, false);
+        }
+      });
+      dialog.setNegativeButton(android.R.string.cancel, null);
+      dialog.show();
+    }
+
+    private PlayServicesStatus checkPlayServices(Context context) {
+      int gcmStatus = 0;
+
+      try {
+        gcmStatus = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+      } catch (Throwable t) {
+        Log.w(TAG, t);
+        return PlayServicesStatus.MISSING;
+      }
+
+      Log.w(TAG, "Play Services: " + gcmStatus);
+
+      switch (gcmStatus) {
+        case ConnectionResult.SUCCESS:
+          return PlayServicesStatus.SUCCESS;
+        case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+          return PlayServicesStatus.NEEDS_UPDATE;
+        case ConnectionResult.SERVICE_DISABLED:
+        case ConnectionResult.SERVICE_MISSING:
+        case ConnectionResult.SERVICE_INVALID:
+        case ConnectionResult.API_UNAVAILABLE:
+        case ConnectionResult.SERVICE_MISSING_PERMISSION:
+          return PlayServicesStatus.MISSING;
+        default:
+          return PlayServicesStatus.TRANSIENT_ERROR;
+      }
     }
   }
 
@@ -317,6 +364,19 @@ public class RegistrationActivity extends BaseActionBarActivity {
 
       startActivity(nextIntent);
       finish();
+    }
+  }
+
+  private class InformationToggleListener implements View.OnClickListener {
+    @Override
+    public void onClick(View v) {
+      if (informationView.getVisibility() == View.VISIBLE) {
+        informationView.setVisibility(View.GONE);
+        informationToggleText.setText(R.string.RegistrationActivity_more_information);
+      } else {
+        informationView.setVisibility(View.VISIBLE);
+        informationToggleText.setText(R.string.RegistrationActivity_less_information);
+      }
     }
   }
 }

@@ -25,6 +25,8 @@ import org.webrtc.VideoCapturer;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoSource;
 import org.webrtc.VideoTrack;
+import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,7 +49,8 @@ public class PeerConnectionWrapper {
                                @NonNull PeerConnectionFactory factory,
                                @NonNull PeerConnection.Observer observer,
                                @NonNull VideoRenderer.Callbacks localRenderer,
-                               @NonNull List<PeerConnection.IceServer> turnServers)
+                               @NonNull List<PeerConnection.IceServer> turnServers,
+                               boolean hideIp)
   {
     List<PeerConnection.IceServer> iceServers = new LinkedList<>();
     iceServers.add(STUN_SERVER);
@@ -59,6 +62,10 @@ public class PeerConnectionWrapper {
 
     configuration.bundlePolicy  = PeerConnection.BundlePolicy.MAXBUNDLE;
     configuration.rtcpMuxPolicy = PeerConnection.RtcpMuxPolicy.REQUIRE;
+
+    if (hideIp) {
+      configuration.iceTransportsType = PeerConnection.IceTransportsType.RELAY;
+    }
 
     constraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
     audioConstraints.optional.add(new MediaConstraints.KeyValuePair("DtlsSrtpKeyAgreement", "true"));
@@ -74,7 +81,6 @@ public class PeerConnectionWrapper {
 
     if (videoCapturer != null) {
       this.videoSource = factory.createVideoSource(videoCapturer);
-      this.videoCapturer.startCapture(1280, 720, 30);
       this.videoTrack = factory.createVideoTrack("ARDAMSv0", videoSource);
 
       this.videoTrack.addRenderer(new VideoRenderer(localRenderer));
@@ -91,6 +97,15 @@ public class PeerConnectionWrapper {
   public void setVideoEnabled(boolean enabled) {
     if (this.videoTrack != null) {
       this.videoTrack.setEnabled(enabled);
+    }
+
+    if (this.videoCapturer != null) {
+      try {
+        if (enabled) this.videoCapturer.startCapture(1280, 720, 30);
+        else         this.videoCapturer.stopCapture();
+      } catch (InterruptedException e) {
+        Log.w(TAG, e);
+      }
     }
   }
 

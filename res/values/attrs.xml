@@ -72,9 +72,12 @@
     <attr name="conversation_item_sent_text_indicator_tab_color" format="reference|color"/>
     <attr name="conversation_item_sent_indicator_text_background" format="reference" />
     <attr name="conversation_item_header_background" format="reference"/>
+    <attr name="conversation_item_last_seen_background" format="reference|color"/>
+    <attr name="conversation_item_last_seen_text_background" format="reference"/>
 
     <attr name="dialog_info_icon" format="reference" />
     <attr name="dialog_alert_icon" format="reference" />
+    <attr name="dialog_background_color" format="reference|color" />
 
     <attr name="conversation_icon_attach_audio" format="reference"/>
     <attr name="conversation_icon_attach_video" format="reference" />
@@ -192,6 +195,12 @@
         <attr name="pickerBorderColor" format="color" />
         <attr name="pickerBorderWidth" format="dimension" />
         <attr name="pickerColors" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="DocumentView">
+        <attr name="documentWidgetBackground" format="color"/>
+        <attr name="documentForegroundTintColor" format="color" />
+        <attr name="documentBackgroundTintColor" format="color" />
     </declare-styleable>
 
 </resources>

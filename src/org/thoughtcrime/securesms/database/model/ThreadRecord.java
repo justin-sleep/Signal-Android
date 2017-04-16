@@ -28,10 +28,8 @@ import android.text.style.StyleSpan;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.MmsSmsColumns;
 import org.thoughtcrime.securesms.database.SmsDatabase;
-import org.thoughtcrime.securesms.database.ThreadDatabase;
 import org.thoughtcrime.securesms.recipients.Recipients;
 import org.thoughtcrime.securesms.util.ExpirationUtil;
-import org.thoughtcrime.securesms.util.GroupUtil;
 
 /**
  * The message record model which represents thread heading messages.
@@ -48,11 +46,12 @@ public class ThreadRecord extends DisplayRecord {
   private           final int     distributionType;
   private           final boolean archived;
   private           final long    expiresIn;
+  private           final long    lastSeen;
 
   public ThreadRecord(@NonNull Context context, @NonNull Body body, @Nullable Uri snippetUri,
                       @NonNull Recipients recipients, long date, long count, boolean read,
                       long threadId, int receiptCount, int status, long snippetType,
-                      int distributionType, boolean archived, long expiresIn)
+                      int distributionType, boolean archived, long expiresIn, long lastSeen)
   {
     super(context, body, recipients, date, date, threadId, status, receiptCount, snippetType);
     this.context          = context.getApplicationContext();
@@ -62,6 +61,7 @@ public class ThreadRecord extends DisplayRecord {
     this.distributionType = distributionType;
     this.archived         = archived;
     this.expiresIn        = expiresIn;
+    this.lastSeen         = lastSeen;
   }
 
   public @Nullable Uri getSnippetUri() {
@@ -73,7 +73,7 @@ public class ThreadRecord extends DisplayRecord {
     if (SmsDatabase.Types.isDecryptInProgressType(type)) {
       return emphasisAdded(context.getString(R.string.MessageDisplayHelper_decrypting_please_wait));
     } else if (isGroupUpdate()) {
-      return emphasisAdded(GroupUtil.getDescription(context, getBody().getBody()).toString());
+      return emphasisAdded(context.getString(R.string.ThreadRecord_group_updated));
     } else if (isGroupQuit()) {
       return emphasisAdded(context.getString(R.string.ThreadRecord_left_the_group));
     } else if (isKeyExchange()) {
@@ -98,7 +98,7 @@ public class ThreadRecord extends DisplayRecord {
     } else if (SmsDatabase.Types.isMissedCall(type)) {
       return emphasisAdded(context.getString(org.thoughtcrime.securesms.R.string.ThreadRecord_missed_call));
     } else if (SmsDatabase.Types.isJoinedType(type)) {
-      return emphasisAdded(context.getString(R.string.ThreadRecord_s_is_on_signal_say_hey, getRecipients().getPrimaryRecipient().toShortString()));
+      return emphasisAdded(context.getString(R.string.ThreadRecord_s_joined_signal, getRecipients().getPrimaryRecipient().toShortString()));
     } else if (SmsDatabase.Types.isExpirationTimerUpdate(type)) {
       String time = ExpirationUtil.getExpirationDisplayValue(context, (int) (getExpiresIn() / 1000));
       return emphasisAdded(context.getString(R.string.ThreadRecord_disappearing_message_time_updated_to_s, time));
@@ -146,5 +146,9 @@ public class ThreadRecord extends DisplayRecord {
 
   public long getExpiresIn() {
     return expiresIn;
+  }
+
+  public long getLastSeen() {
+    return lastSeen;
   }
 }

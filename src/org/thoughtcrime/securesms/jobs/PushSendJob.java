@@ -3,6 +3,7 @@ package org.thoughtcrime.securesms.jobs;
 import android.content.Context;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
 import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.TextSecureExpiredException;
 import org.thoughtcrime.securesms.attachments.Attachment;
@@ -29,7 +30,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 import ws.com.google.android.mms.ContentType;
 
 public abstract class PushSendJob extends SendJob {
@@ -74,27 +74,23 @@ public abstract class PushSendJob extends SendJob {
     List<SignalServiceAttachment> attachments = new LinkedList<>();
 
     for (final Attachment attachment : parts) {
-      if (ContentType.isImageType(attachment.getContentType()) ||
-          ContentType.isAudioType(attachment.getContentType()) ||
-          ContentType.isVideoType(attachment.getContentType()))
-      {
-        try {
-          if (attachment.getDataUri() == null || attachment.getSize() == 0) throw new IOException("Assertion failed, outgoing attachment has no data!");
-          InputStream is = PartAuthority.getAttachmentStream(context, masterSecret, attachment.getDataUri());
-          attachments.add(SignalServiceAttachment.newStreamBuilder()
-                                                 .withStream(is)
-                                                 .withContentType(attachment.getContentType())
-                                                 .withLength(attachment.getSize())
-                                                 .withListener(new ProgressListener() {
-                                                   @Override
-                                                   public void onAttachmentProgress(long total, long progress) {
-                                                     EventBus.getDefault().postSticky(new PartProgressEvent(attachment, total, progress));
-                                                   }
-                                                 })
-                                                 .build());
-        } catch (IOException ioe) {
-          Log.w(TAG, "Couldn't open attachment", ioe);
-        }
+      try {
+        if (attachment.getDataUri() == null || attachment.getSize() == 0) throw new IOException("Assertion failed, outgoing attachment has no data!");
+        InputStream is = PartAuthority.getAttachmentStream(context, masterSecret, attachment.getDataUri());
+        attachments.add(SignalServiceAttachment.newStreamBuilder()
+                                               .withStream(is)
+                                               .withContentType(attachment.getContentType())
+                                               .withLength(attachment.getSize())
+                                               .withFileName(attachment.getFileName())
+                                               .withListener(new ProgressListener() {
+                                                 @Override
+                                                 public void onAttachmentProgress(long total, long progress) {
+                                                   EventBus.getDefault().postSticky(new PartProgressEvent(attachment, total, progress));
+                                                 }
+                                               })
+                                               .build());
+      } catch (IOException ioe) {
+        Log.w(TAG, "Couldn't open attachment", ioe);
       }
     }
 

@@ -131,6 +131,7 @@ public class NotificationState {
     if (threads.size() != 1) throw new AssertionError("We only support replies to single thread notifications!");
 
     Intent intent = new Intent(AndroidAutoReplyReceiver.REPLY_ACTION);
+    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     intent.setClass(context, AndroidAutoReplyReceiver.class);
     intent.setData((Uri.parse("custom://"+System.currentTimeMillis())));
     intent.putExtra(AndroidAutoReplyReceiver.RECIPIENT_IDS_EXTRA, recipients.getIds());
@@ -149,6 +150,7 @@ public class NotificationState {
     }
 
     Intent intent = new Intent(AndroidAutoHeardReceiver.HEARD_ACTION);
+    intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
     intent.setClass(context, AndroidAutoHeardReceiver.class);
     intent.setData((Uri.parse("custom://"+System.currentTimeMillis())));
     intent.putExtra(AndroidAutoHeardReceiver.THREAD_IDS_EXTRA, threadArray);
@@ -167,6 +169,25 @@ public class NotificationState {
     intent.setData((Uri.parse("custom://"+System.currentTimeMillis())));
 
     return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  public PendingIntent getDeleteIntent(Context context) {
+    int       index = 0;
+    long[]    ids   = new long[notifications.size()];
+    boolean[] mms   = new boolean[ids.length];
+
+    for (NotificationItem notificationItem : notifications) {
+      ids[index] = notificationItem.getId();
+      mms[index++]   = notificationItem.isMms();
+    }
+
+    Intent intent = new Intent(context, DeleteNotificationReceiver.class);
+    intent.setAction(DeleteNotificationReceiver.DELETE_NOTIFICATION_ACTION);
+    intent.putExtra(DeleteNotificationReceiver.EXTRA_IDS, ids);
+    intent.putExtra(DeleteNotificationReceiver.EXTRA_MMS, mms);
+    intent.setData((Uri.parse("custom://"+System.currentTimeMillis())));
+
+    return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
 

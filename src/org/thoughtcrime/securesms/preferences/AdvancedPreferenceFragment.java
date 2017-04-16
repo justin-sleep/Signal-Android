@@ -19,22 +19,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.thoughtcrime.redphone.signaling.RedPhoneAccountManager;
-import org.thoughtcrime.redphone.signaling.RedPhoneTrustStore;
-import org.thoughtcrime.redphone.signaling.UnauthorizedException;
-import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.ApplicationPreferencesActivity;
-import org.thoughtcrime.securesms.BuildConfig;
 import org.thoughtcrime.securesms.LogSubmitActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.RegistrationActivity;
 import org.thoughtcrime.securesms.contacts.ContactAccessor;
 import org.thoughtcrime.securesms.contacts.ContactIdentityManager;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
-import org.thoughtcrime.securesms.jobs.RefreshAttributesJob;
 import org.thoughtcrime.securesms.push.AccountManagerFactory;
-import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
+import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
 import org.whispersystems.signalservice.api.push.exceptions.AuthorizationFailedException;
@@ -70,7 +64,6 @@ public class AdvancedPreferenceFragment extends PreferenceFragment {
     ((ApplicationPreferencesActivity) getActivity()).getSupportActionBar().setTitle(R.string.preferences__advanced);
 
     initializePushMessagingToggle();
-    initializeWebrtcCallingToggle();
   }
 
   @Override
@@ -95,11 +88,6 @@ public class AdvancedPreferenceFragment extends PreferenceFragment {
     }
 
     preference.setOnPreferenceChangeListener(new PushMessagingClickListener());
-  }
-
-  private void initializeWebrtcCallingToggle() {
-    this.findPreference(TextSecurePreferences.WEBRTC_CALLING_PREF)
-        .setOnPreferenceChangeListener(new WebRtcClickListener());
   }
 
   private void initializeIdentitySelection() {
@@ -164,18 +152,6 @@ public class AdvancedPreferenceFragment extends PreferenceFragment {
     }
   }
 
-  private class WebRtcClickListener implements Preference.OnPreferenceChangeListener {
-
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-      TextSecurePreferences.setWebrtcCallingEnabled(getContext(), (Boolean)newValue);
-      ApplicationContext.getInstance(getContext())
-                        .getJobManager()
-                        .add(new RefreshAttributesJob(getContext()));
-      return true;
-    }
-  }
-
   private class PushMessagingClickListener implements Preference.OnPreferenceChangeListener {
     private static final int SUCCESS       = 0;
     private static final int NETWORK_ERROR = 1;
@@ -207,12 +183,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragment {
       @Override
       protected Integer doInBackground(Void... params) {
         try {
-          Context                     context                = getActivity();
-          SignalServiceAccountManager accountManager         = AccountManagerFactory.createManager(context);
-          RedPhoneAccountManager      redPhoneAccountManager = new RedPhoneAccountManager(BuildConfig.REDPHONE_MASTER_URL,
-                                                                                          new RedPhoneTrustStore(context),
-                                                                                          TextSecurePreferences.getLocalNumber(context),
-                                                                                          TextSecurePreferences.getPushServerPassword(context));
+          Context                     context        = getActivity();
+          SignalServiceAccountManager accountManager = AccountManagerFactory.createManager(context);
 
           try {
             accountManager.setGcmId(Optional.<String>absent());
@@ -220,13 +192,9 @@ public class AdvancedPreferenceFragment extends PreferenceFragment {
             Log.w(TAG, e);
           }
 
-          try {
-            redPhoneAccountManager.setGcmId(Optional.<String>absent());
-          } catch (UnauthorizedException e) {
-            Log.w(TAG, e);
+          if (!TextSecurePreferences.isGcmDisabled(context)) {
+            GoogleCloudMessaging.getInstance(context).unregister();
           }
-
-          GoogleCloudMessaging.getInstance(context).unregister();
 
           return SUCCESS;
         } catch (IOException ioe) {
