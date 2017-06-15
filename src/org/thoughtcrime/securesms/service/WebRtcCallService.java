@@ -28,7 +28,6 @@ import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.WebRtcCallActivity;
 import org.thoughtcrime.securesms.contacts.ContactAccessor;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
-import org.thoughtcrime.securesms.database.IdentityDatabase.IdentityRecord;
 import org.thoughtcrime.securesms.dependencies.InjectableType;
 import org.thoughtcrime.securesms.dependencies.SignalCommunicationModule.SignalMessageSenderFactory;
 import org.thoughtcrime.securesms.events.WebRtcViewModel;
@@ -69,7 +68,6 @@ import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoTrack;
 import org.whispersystems.libsignal.IdentityKey;
-import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.SignalServiceAccountManager;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
 import org.whispersystems.signalservice.api.crypto.UntrustedIdentityException;
@@ -339,12 +337,6 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
       return;
     }
 
-    if (isUnseenIdentity(this.recipient)) {
-      insertMissedCall(this.recipient, true);
-      terminate();
-      return;
-    }
-
     timeoutExecutor.schedule(new TimeoutRunnable(this.callId), 2, TimeUnit.MINUTES);
 
     initializeVideo();
@@ -370,6 +362,7 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
             @Override
             public void onFailureContinue(Throwable error) {
               Log.w(TAG, error);
+              insertMissedCall(recipient, true);
               terminate();
             }
           });
@@ -497,6 +490,7 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
   private void handleLocalIceCandidate(Intent intent) {
     if (callState == CallState.STATE_IDLE || !Util.isEquals(this.callId, getCallId(intent))) {
       Log.w(TAG, "State is now idle, ignoring ice candidate...");
+      return;
     }
 
     if (recipient == null || callId == null) {
@@ -508,6 +502,7 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
                                                              intent.getStringExtra(EXTRA_ICE_SDP));
 
     if (pendingIceUpdates != null) {
+      Log.w(TAG, "Adding to pending ice candidates...");
       this.pendingIceUpdates.add(iceUpdateMessage);
       return;
     }
@@ -955,28 +950,6 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
     else                return result;
   }
 
-  private boolean isUnseenIdentity(@NonNull Recipient recipient) {
-    Log.w(TAG, "Checking for unseen identity: " + recipient.getRecipientId());
-
-    Optional<IdentityRecord> identityRecord = DatabaseFactory.getIdentityDatabase(this).getIdentity(recipient.getRecipientId());
-
-    if (!identityRecord.isPresent()) {
-      throw new AssertionError("Should have an identity record at this point.");
-    }
-
-    if (identityRecord.get().isFirstUse()) {
-      Log.w(TAG, "Identity is first use...");
-      return false;
-    }
-
-    Log.w(TAG, "Last seen: " + identityRecord.get().getSeen() + " vs timestamp: " + identityRecord.get().getTimestamp());
-    if (identityRecord.get().getSeen() >= identityRecord.get().getTimestamp()) {
-      return false;
-    }
-
-    return true;
-  }
-
   private long getCallId(Intent intent) {
     return intent.getLongExtra(EXTRA_CALL_ID, -1);
   }
@@ -1034,6 +1007,7 @@ public class WebRtcCallService extends Service implements InjectableType, PeerCo
     intent.putExtra(EXTRA_ICE_SDP_MID, candidate.sdpMid);
     intent.putExtra(EXTRA_ICE_SDP_LINE_INDEX, candidate.sdpMLineIndex);
     intent.putExtra(EXTRA_ICE_SDP, candidate.sdp);
+    intent.putExtra(EXTRA_CALL_ID, callId);
 
     startService(intent);
   }
