@@ -613,7 +613,12 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   }
 
   private void handleConversationSettings() {
-    titleView.performClick();
+    Intent intent = new Intent(ConversationActivity.this, RecipientPreferenceActivity.class);
+    intent.putExtra(RecipientPreferenceActivity.ADDRESS_EXTRA, recipient.getAddress());
+    intent.putExtra(RecipientPreferenceActivity.CAN_HAVE_SAFETY_NUMBER_EXTRA,
+                    isSecureText && !isSelfConversation());
+
+    startActivitySceneTransition(intent, titleView.findViewById(R.id.contact_photo_image), "avatar");
   }
 
   private void handleUnmuteNotifications() {
@@ -719,7 +724,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
   private void handleViewMedia() {
     Intent intent = new Intent(this, MediaOverviewActivity.class);
-    intent.putExtra(MediaOverviewActivity.THREAD_ID_EXTRA, threadId);
     intent.putExtra(MediaOverviewActivity.ADDRESS_EXTRA, recipient.getAddress());
     startActivity(intent);
   }
@@ -1201,31 +1205,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       }
     });
 
-    titleView.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(ConversationActivity.this, RecipientPreferenceActivity.class);
-        intent.putExtra(RecipientPreferenceActivity.ADDRESS_EXTRA, recipient.getAddress());
-        intent.putExtra(RecipientPreferenceActivity.CAN_HAVE_SAFETY_NUMBER_EXTRA,
-                        isSecureText && !isSelfConversation());
-
-        startActivitySceneTransition(intent, titleView.findViewById(R.id.title), "recipient_name");
-      }
-    });
-
-    unblockButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        handleUnblock();
-      }
-    });
-
-    makeDefaultSmsButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        handleMakeDefaultSms();
-      }
-    });
+    titleView.setOnClickListener(v -> handleConversationSettings());
+    titleView.setOnBackClickedListener(view -> super.onBackPressed());
+    unblockButton.setOnClickListener(v -> handleUnblock());
+    makeDefaultSmsButton.setOnClickListener(v -> handleMakeDefaultSms());
 
     composeText.setOnKeyListener(composeKeyPressedListener);
     composeText.addTextChangedListener(composeKeyPressedListener);
@@ -1243,7 +1226,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   }
 
   protected void initializeActionBar() {
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     getSupportActionBar().setCustomView(R.layout.conversation_title_view);
     getSupportActionBar().setDisplayShowCustomEnabled(true);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -1279,19 +1262,16 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
   @Override
   public void onModified(final Recipient recipient) {
-    titleView.post(new Runnable() {
-      @Override
-      public void run() {
-        titleView.setTitle(recipient);
-        titleView.setVerified(identityRecords.isVerified());
-        setBlockedUserState(recipient, isSecureText, isDefaultSms);
-        setActionBarColor(recipient.getColor());
-        setGroupShareProfileReminder(recipient);
-        updateInviteReminder(recipient.hasSeenInviteReminder());
-        updateDefaultSubscriptionId(recipient.getDefaultSubscriptionId());
-        initializeSecurity(isSecureText, isDefaultSms);
-        invalidateOptionsMenu();
-      }
+    Util.runOnMain(() -> {
+      titleView.setTitle(recipient);
+      titleView.setVerified(identityRecords.isVerified());
+      setBlockedUserState(recipient, isSecureText, isDefaultSms);
+      setActionBarColor(recipient.getColor());
+      setGroupShareProfileReminder(recipient);
+      updateInviteReminder(recipient.hasSeenInviteReminder());
+      updateDefaultSubscriptionId(recipient.getDefaultSubscriptionId());
+      initializeSecurity(isSecureText, isDefaultSms);
+      invalidateOptionsMenu();
     });
   }
 

@@ -14,15 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.thoughtcrime.securesms.preferences;
+package org.thoughtcrime.securesms.preferences.widgets;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
-import android.preference.ListPreference;
 import android.support.annotation.NonNull;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.PreferenceViewHolder;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import org.thoughtcrime.securesms.R;
@@ -69,8 +68,8 @@ public class LEDColorListPreference extends ListPreference {
   }
 
   @Override
-  protected void onBindView(View view) {
-    super.onBindView(view);
+  public void onBindViewHolder(PreferenceViewHolder view) {
+    super.onBindViewHolder(view);
     this.colorImageView = (ImageView)view.findViewById(R.id.color_view);
     setPreviewColor(getValue());
   }

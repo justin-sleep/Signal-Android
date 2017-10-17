@@ -1,9 +1,8 @@
-package org.thoughtcrime.securesms.preferences;
+package org.thoughtcrime.securesms.preferences.widgets;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.RingtonePreference;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
@@ -36,4 +35,6 @@ public class AdvancedRingtonePreference extends RingtonePreference {
   public void setCurrentRingtone(Uri uri) {
     currentRingtone = uri;
   }
+
+
 }
