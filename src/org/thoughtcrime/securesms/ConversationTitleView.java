@@ -15,6 +15,7 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
 import org.thoughtcrime.securesms.components.AvatarImageView;
+import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ViewUtil;
@@ -56,7 +57,7 @@ public class ConversationTitleView extends RelativeLayout {
     ViewUtil.setTextViewGravityStart(this.subtitle, getContext());
   }
 
-  public void setTitle(@Nullable Recipient recipient) {
+  public void setTitle(@NonNull GlideRequests glideRequests, @Nullable Recipient recipient) {
     if      (recipient == null) setComposeTitle();
     else                        setRecipientTitle(recipient);
 
@@ -69,7 +70,7 @@ public class ConversationTitleView extends RelativeLayout {
     }
 
     if (recipient != null) {
-      this.avatar.setAvatar(recipient, false);
+      this.avatar.setAvatar(glideRequests, recipient, false);
     }
   }
 
@@ -81,6 +82,12 @@ public class ConversationTitleView extends RelativeLayout {
   public void setOnClickListener(@Nullable OnClickListener listener) {
     this.content.setOnClickListener(listener);
     this.avatar.setOnClickListener(listener);
+  }
+
+  @Override
+  public void setOnLongClickListener(@Nullable OnLongClickListener listener) {
+    this.content.setOnLongClickListener(listener);
+    this.avatar.setOnLongClickListener(listener);
   }
 
   public void setOnBackClickedListener(@Nullable OnClickListener listener) {
@@ -106,7 +113,7 @@ public class ConversationTitleView extends RelativeLayout {
     this.subtitle.setText(Stream.of(recipient.getParticipants())
                                 .filter(r -> !r.getAddress().serialize().equals(localNumber))
                                 .map(Recipient::toShortString)
-                                .collect(Collectors.joining(",")));
+                                .collect(Collectors.joining(", ")));
 
     this.subtitle.setVisibility(View.VISIBLE);
   }
