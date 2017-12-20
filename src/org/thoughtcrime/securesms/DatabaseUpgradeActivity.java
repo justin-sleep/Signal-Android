@@ -17,6 +17,7 @@
 
 package org.thoughtcrime.securesms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -73,6 +74,8 @@ public class DatabaseUpgradeActivity extends BaseActivity {
   public static final int NO_MORE_CANONICAL_DB_VERSION         = 276;
   public static final int PROFILES                             = 289;
   public static final int SCREENSHOTS                          = 300;
+  public static final int PERSISTENT_BLOBS                     = 317;
+  public static final int INTERNALIZE_CONTACTS                 = 317;
 
   private static final SortedSet<Integer> UPGRADE_VERSIONS = new TreeSet<Integer>() {{
     add(NO_MORE_KEY_EXCHANGE_PREFIX_VERSION);
@@ -88,6 +91,8 @@ public class DatabaseUpgradeActivity extends BaseActivity {
     add(REDPHONE_SUPPORT_VERSION);
     add(NO_MORE_CANONICAL_DB_VERSION);
     add(SCREENSHOTS);
+    add(INTERNALIZE_CONTACTS);
+    add(PERSISTENT_BLOBS);
   }};
 
   private MasterSecret masterSecret;
@@ -143,6 +148,7 @@ public class DatabaseUpgradeActivity extends BaseActivity {
     }
   }
 
+  @SuppressLint("StaticFieldLeak")
   private void updateNotifications(final Context context, final MasterSecret masterSecret) {
     new AsyncTask<Void, Void, Void>() {
       @Override
@@ -157,6 +163,7 @@ public class DatabaseUpgradeActivity extends BaseActivity {
     public void setProgress(int progress, int total);
   }
 
+  @SuppressLint("StaticFieldLeak")
   private class DatabaseUpgradeTask extends AsyncTask<Integer, Double, Void>
       implements DatabaseUpgradeListener
   {
@@ -222,7 +229,7 @@ public class DatabaseUpgradeActivity extends BaseActivity {
       if (params[0] < CONTACTS_ACCOUNT_VERSION) {
         ApplicationContext.getInstance(getApplicationContext())
                           .getJobManager()
-                          .add(new DirectoryRefreshJob(getApplicationContext()));
+                          .add(new DirectoryRefreshJob(getApplicationContext(), false));
       }
 
       if (params[0] < MEDIA_DOWNLOAD_CONTROLS_VERSION) {
@@ -235,18 +242,34 @@ public class DatabaseUpgradeActivity extends BaseActivity {
                           .add(new RefreshAttributesJob(getApplicationContext()));
         ApplicationContext.getInstance(getApplicationContext())
                           .getJobManager()
-                          .add(new DirectoryRefreshJob(getApplicationContext()));
+                          .add(new DirectoryRefreshJob(getApplicationContext(), false));
       }
 
       if (params[0] < PROFILES) {
         ApplicationContext.getInstance(getApplicationContext())
                           .getJobManager()
-                          .add(new DirectoryRefreshJob(getApplicationContext()));
+                          .add(new DirectoryRefreshJob(getApplicationContext(), false));
       }
 
       if (params[0] < SCREENSHOTS) {
         boolean screenSecurity = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(TextSecurePreferences.SCREEN_SECURITY_PREF, true);
         TextSecurePreferences.setScreenSecurityEnabled(getApplicationContext(), screenSecurity);
+      }
+
+      if (params[0] < PERSISTENT_BLOBS) {
+        File externalDir = context.getExternalFilesDir(null);
+
+        if (externalDir != null && externalDir.isDirectory() && externalDir.exists()) {
+          for (File blob : externalDir.listFiles()) {
+            if (blob.exists() && blob.isFile()) blob.delete();
+          }
+        }
+      }
+
+      if (params[0] < INTERNALIZE_CONTACTS) {
+        if (TextSecurePreferences.isPushRegistered(getApplicationContext())) {
+          TextSecurePreferences.setHasSuccessfullyRetrievedDirectory(getApplicationContext(), true);
+        }
       }
 
       return null;

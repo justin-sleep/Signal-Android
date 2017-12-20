@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2014 Open Whisper Systems
+/*
+ * Copyright (C) 2014-2017 Open Whisper Systems
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,34 +16,35 @@
  */
 package org.thoughtcrime.securesms;
 
+import android.*;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.thoughtcrime.securesms.components.RatingManager;
+import org.thoughtcrime.securesms.components.SearchToolbar;
 import org.thoughtcrime.securesms.crypto.MasterSecret;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
-import org.thoughtcrime.securesms.database.MessagingDatabase;
 import org.thoughtcrime.securesms.database.MessagingDatabase.MarkedMessageInfo;
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver;
 import org.thoughtcrime.securesms.notifications.MessageNotifier;
+import org.thoughtcrime.securesms.permissions.Permissions;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.util.DynamicLanguage;
+import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme;
 import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 
@@ -52,14 +53,16 @@ import java.util.List;
 public class ConversationListActivity extends PassphraseRequiredActionBarActivity
     implements ConversationListFragment.ConversationSelectedListener
 {
+  @SuppressWarnings("unused")
   private static final String TAG = ConversationListActivity.class.getSimpleName();
 
-  private final DynamicTheme    dynamicTheme    = new DynamicTheme   ();
+  private final DynamicTheme    dynamicTheme    = new DynamicNoActionBarTheme();
   private final DynamicLanguage dynamicLanguage = new DynamicLanguage();
 
   private ConversationListFragment fragment;
-  private ContentObserver observer;
-  private MasterSecret masterSecret;
+  private MasterSecret             masterSecret;
+  private SearchToolbar            searchToolbar;
+  private ImageView                searchAction;
 
   @Override
   protected void onPreCreate() {
@@ -71,11 +74,16 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
   protected void onCreate(Bundle icicle, @NonNull MasterSecret masterSecret) {
     this.masterSecret = masterSecret;
 
-    getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-    getSupportActionBar().setTitle(R.string.app_name);
-    fragment = initFragment(android.R.id.content, new ConversationListFragment(), masterSecret, dynamicLanguage.getCurrentLocale());
+    setContentView(R.layout.conversation_list_activity);
 
-    initializeContactUpdatesReceiver();
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
+    searchToolbar = findViewById(R.id.search_toolbar);
+    searchAction  = findViewById(R.id.search_action);
+    fragment      = initFragment(R.id.fragment_container, new ConversationListFragment(), masterSecret, dynamicLanguage.getCurrentLocale());
+
+    initializeSearchListener();
 
     RatingManager.showRatingDialogIfNecessary(this);
   }
@@ -89,7 +97,6 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
 
   @Override
   public void onDestroy() {
-    if (observer != null) getContentResolver().unregisterContentObserver(observer);
     super.onDestroy();
   }
 
@@ -102,47 +109,34 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
 
     menu.findItem(R.id.menu_clear_passphrase).setVisible(!TextSecurePreferences.isPasswordDisabled(this));
 
-    inflater.inflate(R.menu.conversation_list, menu);
-    MenuItem menuItem = menu.findItem(R.id.menu_search);
-    initializeSearch(menuItem);
-
     super.onPrepareOptionsMenu(menu);
     return true;
   }
 
-  private void initializeSearch(MenuItem searchViewItem) {
-    SearchView searchView = (SearchView)MenuItemCompat.getActionView(searchViewItem);
-    searchView.setQueryHint(getString(R.string.ConversationListActivity_search));
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override
-      public boolean onQueryTextSubmit(String query) {
-        if (fragment != null) {
-          fragment.setQueryFilter(query);
-          return true;
-        }
-
-        return false;
-      }
-
-      @Override
-      public boolean onQueryTextChange(String newText) {
-        return onQueryTextSubmit(newText);
-      }
+  private void initializeSearchListener() {
+    searchAction.setOnClickListener(v -> {
+      Permissions.with(this)
+                 .request(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
+                 .ifNecessary()
+                 .onAllGranted(() -> searchToolbar.display(searchAction.getX() + (searchAction.getWidth() / 2),
+                                                           searchAction.getY() + (searchAction.getHeight() / 2)))
+                 .withPermanentDenialDialog(getString(R.string.ConversationListActivity_signal_needs_contacts_permission_in_order_to_search_your_contacts_but_it_has_been_permanently_denied))
+                 .execute();
     });
 
-    MenuItemCompat.setOnActionExpandListener(searchViewItem, new MenuItemCompat.OnActionExpandListener() {
+    searchToolbar.setListener(new SearchToolbar.SearchListener() {
       @Override
-      public boolean onMenuItemActionExpand(MenuItem menuItem) {
-        return true;
+      public void onSearchTextChange(String text) {
+        if (fragment != null) {
+          fragment.setQueryFilter(text);
+        }
       }
 
       @Override
-      public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+      public void onSearchReset() {
         if (fragment != null) {
           fragment.resetQueryFilter();
         }
-
-        return true;
       }
     });
   }
@@ -183,6 +177,12 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     startActivity(intent);
   }
 
+  @Override
+  public void onBackPressed() {
+    if (searchToolbar.isVisible()) searchToolbar.collapse();
+    else                           super.onBackPressed();
+  }
+
   private void createGroup() {
     Intent intent = new Intent(this, GroupCreateActivity.class);
     startActivity(intent);
@@ -203,6 +203,7 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     startActivity(new Intent(this, ImportExportActivity.class));
   }
 
+  @SuppressLint("StaticFieldLeak")
   private void handleMarkAllRead() {
     new AsyncTask<Void, Void, Void>() {
       @Override
@@ -228,25 +229,5 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     } catch (ActivityNotFoundException e) {
       Toast.makeText(this, R.string.ConversationListActivity_there_is_no_browser_installed_on_your_device, Toast.LENGTH_LONG).show();
     }
-  }
-
-  private void initializeContactUpdatesReceiver() {
-    observer = new ContentObserver(null) {
-      @Override
-      public void onChange(boolean selfChange) {
-        super.onChange(selfChange);
-        Log.w(TAG, "Detected android contact data changed, refreshing cache");
-        Recipient.clearCache(ConversationListActivity.this);
-        ConversationListActivity.this.runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            fragment.getListAdapter().notifyDataSetChanged();
-          }
-        });
-      }
-    };
-
-    getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI,
-                                                 true, observer);
   }
 }
