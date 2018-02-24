@@ -48,7 +48,6 @@ import org.thoughtcrime.securesms.contacts.ContactsCursorLoader;
 import org.thoughtcrime.securesms.database.CursorRecyclerViewAdapter;
 import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.permissions.Permissions;
-import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.util.DirectoryHelper;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
@@ -213,12 +212,15 @@ public class ContactSelectionListFragment extends    Fragment
 
   public void reset() {
     selectedContacts.clear();
-    getLoaderManager().restartLoader(0, null, this);
+
+    if (!isDetached() && !isRemoving() && getActivity() != null && !getActivity().isFinishing()) {
+      getLoaderManager().restartLoader(0, null, this);
+    }
   }
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    return new ContactsCursorLoader(getActivity(), KeyCachingService.getMasterSecret(getContext()),
+    return new ContactsCursorLoader(getActivity(),
                                     getActivity().getIntent().getIntExtra(DISPLAY_MODE, DISPLAY_MODE_ALL),
                                     cursorFilter, getActivity().getIntent().getBooleanExtra(RECENTS, false));
   }
@@ -260,7 +262,7 @@ public class ContactSelectionListFragment extends    Fragment
       @Override
       protected Boolean doInBackground(Void... voids) {
         try {
-          DirectoryHelper.refreshDirectory(getContext(), null, false);
+          DirectoryHelper.refreshDirectory(getContext(), false);
           return true;
         } catch (IOException e) {
           Log.w(TAG, e);
