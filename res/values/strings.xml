@@ -90,6 +90,7 @@
     <!-- ContactsCursorLoader -->
     <string name="ContactsCursorLoader_recent_chats">Recent chats</string>
     <string name="ContactsCursorLoader_contacts">Contacts</string>
+    <string name="ContactsCursorLoader_groups">Groups</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Message %s</string>
@@ -401,6 +402,16 @@
 
     <!-- MediaOverviewActivity -->
     <string name="MediaOverviewActivity_Media">Media</string>
+    <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+        <item quantity="one">Delete selected message?</item>
+        <item quantity="other">Delete selected messages?</item>
+    </plurals>
+    <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+        <item quantity="one">This will permanently delete the selected message.</item>
+        <item quantity="other">This will permanently delete all %1$d selected messages.</item>
+    </plurals>
+    <string name="MediaOverviewActivity_Media_delete_progress_title">Deleting</string>
+    <string name="MediaOverviewActivity_Media_delete_progress_message">Deleting messages...</string>
     <string name="MediaOverviewActivity_Documents">Documents</string>
 
     <!--- NotificationBarManager -->
@@ -664,6 +675,8 @@
     <string name="MediaPreviewActivity_draft">Draft</string>
     <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal needs the Storage permission in order to save to external storage, but it has been permanently denied. Please continue to app settings, select \"Permissions\", and enable \"Storage\".</string>
     <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Unable to save to external storage without permissions</string>
+    <string name="MediaPreviewActivity_media_delete_confirmation_title">Delete message?</string>
+    <string name="MediaPreviewActivity_media_delete_confirmation_message">This will permanently delete this message.</string>
 
 
     <!-- MessageNotifier -->
