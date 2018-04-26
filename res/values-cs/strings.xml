@@ -80,6 +80,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Nedávné konverzace</string>
   <string name="ContactsCursorLoader_contacts">Kontakty</string>
+  <string name="ContactsCursorLoader_groups">Skupiny</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Zpráva %s</string>
   <string name="ContactsDatabase_signal_call_s">Signal volání %s</string>
@@ -184,6 +185,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">Mažu</string>
   <string name="ConversationFragment_deleting_messages">Mažu zprávy...</string>
+  <string name="ConversationFragment_quoted_message_not_found">Citovaná zpráva nebyla nalezena</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">Nemáte na vašem zařízení nainstalován žádný prohlížeč.</string>
   <!--ConversationListFragment-->
@@ -359,6 +361,16 @@ tuto zálohu importovali, mohou se některé zprávy objevit vícekrát.</string
   <string name="MmsDownloader_error_reading_mms_settings">Chyba při čtení nastavení MMS</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Media</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Smazat označenou zprávu?</item>
+    <item quantity="few">Smazat označené zprávy?</item>
+    <item quantity="other">Smazat označené zprávy?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">Tímto trvale smažete označenou zprávu.</item>
+    <item quantity="few">Tímto trvale smažete všechny %1$d označené zprávy.</item>
+    <item quantity="other">Tímto trvale smažete všech %1$d označených zpráv.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">Mažu</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">Mažu zprávy...</string>
   <string name="MediaOverviewActivity_Documents">Dokumenty</string>
@@ -576,6 +588,8 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="MediaPreviewActivity_draft">Koncept</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signál potřebuje oprávnění pro přístup k úložišti aby mohl zapisovat do externího úložiště, ale toto oprávnění je nyní zakázáno. Prosím pokračujte do menu nastavení aplikací, vyberte \"Oprávnění\" a povolte \"Úložiště\".</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Nelze ukládat do externího úložiště bez oprávnění.</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Smazat zprávu?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Tímto trvale smažete tuto zprávu.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d nových zpráv v %2$d konverzacích</string>
   <string name="MessageNotifier_most_recent_from_s">Poslední od: %1$s</string>
@@ -614,6 +628,9 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="WebRtcCallScreen_new_safety_numbers">Bezpečnostní kódy pro konverzaci s %1$s se změnily. To může znamenat, že se někdo pokouší zachytit vaši konverzaci, nebo že %2$s si jednoduše jen přeinstaloval Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Možná budete chtít zkontrolovat vaše bezpečnostní kódy pro tento kontakt.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Nové bezpečnostní kódy</string>
+  <string name="WebRtcCallScreen_accept">Přijmout</string>
+  <string name="WebRtcCallScreen_cancel">Storno</string>
+  <string name="WebRtcCallScreen_end_call">Ukončit hovor</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Ťuknutím povolíte video</string>
   <!--attachment_type_selector-->
@@ -681,6 +698,12 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="audio_view__play_accessibility_description">Přehrát</string>
   <string name="audio_view__pause_accessibility_description">Zastavit</string>
   <string name="audio_view__download_accessibility_description">Stáhnout</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Audio</string>
+  <string name="QuoteView_video">Video</string>
+  <string name="QuoteView_photo">Fotografie</string>
+  <string name="QuoteView_document">Dokument</string>
+  <string name="QuoteView_you">Vy</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Hromadný výběr</string>
   <string name="conversation_fragment_cab__batch_selection_amount">Vybráno %s</string>
@@ -1014,6 +1037,7 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="conversation_context__menu_delete_message">Smazat zprávu</string>
   <string name="conversation_context__menu_forward_message">Přeposlat zprávu</string>
   <string name="conversation_context__menu_resend_message">Znovu poslat zprávu</string>
+  <string name="conversation_context__menu_reply_to_message">Odpovědět na zprávu</string>
   <!--conversation_context_image-->
   <string name="conversation_context_image__save_attachment">Uložit přílohu</string>
   <!--conversation_expiring_off-->
@@ -1149,10 +1173,13 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signál potřebuje oprávnění pro přístup k úložišti, aby mohl vytvářet zálohy, ale toto oprávnění je nyní trvale zakázáno. Prosím pokračujte do menu nastavení aplikací, vyberte \"Oprávnění\" a povolte \"Úložiště\".</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Poslední záloha: %s</string>
   <string name="ChatsPreferenceFragment_in_progress">Probíhá</string>
+  <string name="LocalBackupJob_creating_backup">Vytvářím zálohu...</string>
   <string name="ProgressPreference_d_messages_so_far">%dzpráv zatím</string>
   <string name="RegistrationActivity_verify_s">Ověřuji %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Prosím vložte ověřovací kód zaslaný %s</string>
   <string name="RegistrationActivity_wrong_number">Špatné číslo?</string>
+  <string name="RegistrationActivity_call_me_instead">Zavolej mi místo toho</string>
+  <string name="RegistrationActivity_available_in">K dispozici v:\u0020</string>
   <string name="BackupUtil_never">Nikdy</string>
   <string name="BackupUtil_unknown">Neznámý</string>
   <string name="prompt_passphrase_activity__unlock_signal">Odemknout Signal</string>
@@ -1196,5 +1223,6 @@ Obdržen požadavek na výměnu klíčů pro neplatnou verzi protokolu.</string>
   <string name="prompt_passphrase_activity__signal_is_locked">Signal je zamčen</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">Klepnutím odemkněte</string>
   <string name="RegistrationLockDialog_reminder">Připomínka:</string>
+  <string name="recipient_preferences__about">Info o</string>
   <!--EOF-->
 </resources>

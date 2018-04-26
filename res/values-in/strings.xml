@@ -560,6 +560,9 @@ Diterima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <string name="WebRtcCallScreen_new_safety_numbers">Nomor keamanan untuk percakapan Anda dengan %1$s telah berubah. Ini bisa berarti seseorang mencoba untuk mencegat komunikasi Anda, atau %2$s hanya perlu memasang kembali Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Mungkin sebaiknya Anda memastikan angka keamanan dengan kontak ini.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Angka keamanan baru</string>
+  <string name="WebRtcCallScreen_accept">Terima</string>
+  <string name="WebRtcCallScreen_cancel">Batal</string>
+  <string name="WebRtcCallScreen_end_call">Akhiri panggilan</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Ketuk untuk mengaktifkan video Anda</string>
   <!--attachment_type_selector-->
@@ -624,6 +627,10 @@ Diterima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <string name="audio_view__play_accessibility_description">Putar</string>
   <string name="audio_view__pause_accessibility_description">Jeda</string>
   <string name="audio_view__download_accessibility_description">Unduh</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Audio</string>
+  <string name="QuoteView_video">Video</string>
+  <string name="QuoteView_you">Anda</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Mode pemilihan banyak</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s terpilih</string>

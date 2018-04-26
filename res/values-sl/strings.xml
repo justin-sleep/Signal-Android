@@ -83,6 +83,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Nedavni pogovori</string>
   <string name="ContactsCursorLoader_contacts">Stiki</string>
+  <string name="ContactsCursorLoader_groups">Skupine</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Sporočilo %s</string>
   <string name="ContactsDatabase_signal_call_s">Klic Signal: %s</string>
@@ -195,6 +196,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">Brišem</string>
   <string name="ConversationFragment_deleting_messages">Brišem sporočila ...</string>
+  <string name="ConversationFragment_quoted_message_not_found">Citirano sporočilo ni bilo najdeno</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">Na svoji napravi nimate nameščenega spletnega brskalnika.</string>
   <!--ConversationListFragment-->
@@ -375,6 +377,18 @@
   <string name="MmsDownloader_error_reading_mms_settings">Napaka pri branju nastavitev MMS brezžičnega ponudnika</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Multimedija</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Izbrišem izbrano sporočilo?</item>
+    <item quantity="two">Izbrišem izbrani sporočili?</item>
+    <item quantity="few">Izbrišem izbrana sporočila?</item>
+    <item quantity="other">Izbrišem izbrana sporočila?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">Izbrano sporočilo bo nepovratno izbrisano.</item>
+    <item quantity="two">%1$dizbrani sporočili bosta nepovratno izbrisani.</item>
+    <item quantity="few">Vsa %1$d izbrana sporočila bodo nepovratno izbrisana.</item>
+    <item quantity="other">Vseh %1$d izbranih sporočil bo nepovratno izbrisanih.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">Brišem</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">Brišem sporočila ...</string>
   <string name="MediaOverviewActivity_Documents">Dokumenti</string>
@@ -591,6 +605,8 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="MediaPreviewActivity_draft">Osnutek</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Dostop do shrambe je bil trajno onemogočen. Aplikacija Signal potrebuje dovoljenje za dostop do sistemske shrambe za shranjevanje na zunanji pomnilnik naprave. Prosimo, pojdite v meni Nastavitve aplikacij, izberite \"Dovoljenja\" in omogočite dovoljenje pod postavko \"Shramba\".</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Brez dovoljenja za dostop do shrambe ne morem shranjevati na zunanji pomnilnik naprave.</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Izbrišem sporočilo?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Sporočilo bo nepovratno izbrisano.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">Novih sporočil: %1$d, pogovorov: %2$d</string>
   <string name="MessageNotifier_most_recent_from_s">Zadnje sporočilo od: %1$s</string>
@@ -629,6 +645,9 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="WebRtcCallScreen_new_safety_numbers">Vaše varnostno število z uporabnikom %1$s je bilo spremenjeno. To lahko pomeni, da poskuša nekdo prestrezati vajino komunikacijo ali pa je %2$s zgolj ponovno namestil aplikacijo Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Morda bi želeli preveriti vajino skupno varnostno število.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Novo varnostno število</string>
+  <string name="WebRtcCallScreen_accept">Sprejmi</string>
+  <string name="WebRtcCallScreen_cancel">Prekliči</string>
+  <string name="WebRtcCallScreen_end_call">Zaključi klic</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Tapnite za vklop videa</string>
   <!--attachment_type_selector-->
@@ -696,6 +715,12 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="audio_view__play_accessibility_description">Predvajaj</string>
   <string name="audio_view__pause_accessibility_description">Pavza</string>
   <string name="audio_view__download_accessibility_description">Prenesi</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Zvok</string>
+  <string name="QuoteView_video">Video</string>
+  <string name="QuoteView_photo">Fotografija</string>
+  <string name="QuoteView_document">Dokument</string>
+  <string name="QuoteView_you">Vi</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Skupinski način izbire</string>
   <string name="conversation_fragment_cab__batch_selection_amount">Izbranih: %s</string>
@@ -1037,6 +1062,7 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="conversation_context__menu_delete_message">Izbriši sporočilo</string>
   <string name="conversation_context__menu_forward_message">Posreduj sporočilo</string>
   <string name="conversation_context__menu_resend_message">Ponovno pošlji sporočilo</string>
+  <string name="conversation_context__menu_reply_to_message">Odgovor na sporočilo</string>
   <!--conversation_context_image-->
   <string name="conversation_context_image__save_attachment">Shrani priponko</string>
   <!--conversation_expiring_off-->
@@ -1172,10 +1198,13 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Dovoljenja za dostop do zunanjega pomnilnika, ki ga Aplikacija Signal potrebuje za varnostno kopiranje, je bilo trajno odvzeto. Prosimo, pojdite v sistemski meni z nastavitvami za aplikacije, izberite \"Dovoljenja\" in označite polje \"Zunanja shramba\".</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Zadnja varnostna kopija: %s</string>
   <string name="ChatsPreferenceFragment_in_progress">V teku</string>
+  <string name="LocalBackupJob_creating_backup">Izdelujem varnostno kopijo... </string>
   <string name="ProgressPreference_d_messages_so_far">%d sporočil zaenkrat</string>
   <string name="RegistrationActivity_verify_s">Potrdi %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Prosimo, vnesite potrditveno kodo, poslano na %s.</string>
   <string name="RegistrationActivity_wrong_number">Napačna številka?</string>
+  <string name="RegistrationActivity_call_me_instead">Raje me pokličite</string>
+  <string name="RegistrationActivity_available_in">Dosegljiv čez:\u0020</string>
   <string name="BackupUtil_never">Nikoli</string>
   <string name="BackupUtil_unknown">Neznano</string>
   <string name="prompt_passphrase_activity__unlock_signal">Odkleni Signal</string>
@@ -1219,5 +1248,6 @@ Prejeto sporočilo za izmenjavo ključev za napačno različico protokola.</stri
   <string name="prompt_passphrase_activity__signal_is_locked">Signal je zaklenjen</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">TAPNITE ZA ODKLEPANJE</string>
   <string name="RegistrationLockDialog_reminder">Opomnik:</string>
+  <string name="recipient_preferences__about">Več</string>
   <!--EOF-->
 </resources>

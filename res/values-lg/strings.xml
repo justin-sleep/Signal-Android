@@ -410,6 +410,9 @@ gy\'olonze (%s) sintuufu.</string>
   <!--VideoPlayer-->
   <!--WebRtcCallActivity-->
   <!--WebRtcCallScreen-->
+  <string name="WebRtcCallScreen_accept">Kiriza</string>
+  <string name="WebRtcCallScreen_cancel">Sazzamu</string>
+  <string name="WebRtcCallScreen_end_call">komya esimu</string>
   <!--WebRtcCallControls-->
   <!--attachment_type_selector-->
   <string name="attachment_type_selector__audio">doboozi</string>
@@ -450,6 +453,10 @@ gy\'olonze (%s) sintuufu.</string>
   <!--conversation_item_received-->
   <string name="conversation_item_received__contact_photo_description">Ekifananyi kya kontakiti</string>
   <!--audio_view-->
+  <!--QuoteView-->
+  <string name="QuoteView_audio">edoboozi</string>
+  <string name="QuoteView_video">Olutambi</string>
+  <string name="QuoteView_you">Gwe</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_amount">%s kilondedwako</string>
   <!--conversation_fragment-->

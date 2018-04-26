@@ -565,6 +565,9 @@ U pranua porosi për shkëmbim çelësash për një version protokolli të pavle
   <string name="WebRtcCallScreen_new_safety_numbers">Numri i sigurisë për bisedën tuaj me %1$s ka ndryshuar. Kjo mund të sepse dikush është duke u përpjekur për të kapur komunikimin tuaj, ose se %2$s thjesht ka ri-instaluar Signal-in.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Ndoshta deshironi të verifikoni numrin e juaj sigurie me këtë kontakt.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Numër sigurie i ri</string>
+  <string name="WebRtcCallScreen_accept">Prano</string>
+  <string name="WebRtcCallScreen_cancel">Anulo</string>
+  <string name="WebRtcCallScreen_end_call">Përfundo thirrjen</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Prek për të aktivizuar videon tënd</string>
   <!--attachment_type_selector-->
@@ -629,6 +632,10 @@ U pranua porosi për shkëmbim çelësash për një version protokolli të pavle
   <string name="audio_view__play_accessibility_description">Luaj</string>
   <string name="audio_view__pause_accessibility_description">Ndërprerje</string>
   <string name="audio_view__download_accessibility_description">Shkarko</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Audio</string>
+  <string name="QuoteView_video">Video</string>
+  <string name="QuoteView_you">Ti</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Mënyrë përzgjedhje grupi</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s të përzgjedhur</string>

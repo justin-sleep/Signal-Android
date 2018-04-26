@@ -589,6 +589,9 @@
   <string name="WebRtcCallScreen_new_safety_numbers">ตัวเลขความปลอดภัยของการสนทนาระหว่างคุณกับ %1$s เปลี่ยนไป นี่อาจหมายความว่า มีใครพยายามดักฟังการสื่อสารของคุณ หรือไม่ก็แค่ %2$s ได้ติดตั้งแอป Signal ใหม่</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">คุณอาจต้องการตรวจยืนยันตัวเลขความปลอดภัยระหว่างคุณกับคนที่คุณติดต่อรายนี้</string>
   <string name="WebRtcCallScreen_new_safety_number_title">ตัวเลขความปลอดภัยใหม่</string>
+  <string name="WebRtcCallScreen_accept">ยอมรับ</string>
+  <string name="WebRtcCallScreen_cancel">ยกเลิก</string>
+  <string name="WebRtcCallScreen_end_call">วางสาย</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">แตะเพื่อเปิดใช้วิดีโอของคุณ</string>
   <!--attachment_type_selector-->
@@ -656,6 +659,10 @@
   <string name="audio_view__play_accessibility_description">เล่น</string>
   <string name="audio_view__pause_accessibility_description">หยุดชั่วคราว</string>
   <string name="audio_view__download_accessibility_description">ดาวน์โหลด</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">เสียง</string>
+  <string name="QuoteView_video">วิดีโอ</string>
+  <string name="QuoteView_you">คุณ</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">โหมดการเลือกเป็นชุด</string>
   <string name="conversation_fragment_cab__batch_selection_amount">เลือกแล้ว %s</string>

@@ -83,6 +83,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Ostatnie rozmowy</string>
   <string name="ContactsCursorLoader_contacts">Kontakty</string>
+  <string name="ContactsCursorLoader_groups">Grupy</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Wiadomość %s</string>
   <string name="ContactsDatabase_signal_call_s">Połączenie Signal %s</string>
@@ -195,6 +196,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">Usuwanie</string>
   <string name="ConversationFragment_deleting_messages">Usuwanie wiadomości...</string>
+  <string name="ConversationFragment_quoted_message_not_found">Nie znaleziono cytowanej wiadomości</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">Twoje urządzenie nie ma zainstalowanej przeglądarki.</string>
   <!--ConversationListFragment-->
@@ -376,6 +378,18 @@ wiadomości SMS z domyślnej aplikacji SMS. Jeżeli wcześniej wykonywałeś ju�
   <string name="MmsDownloader_error_reading_mms_settings">Błąd odczytu ustawień MMS operatora</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Media</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Usunąć wybraną wiadomość?</item>
+    <item quantity="few">Usunąć wybrane wiadomości?</item>
+    <item quantity="many">Usunąć wybrane wiadomości?</item>
+    <item quantity="other">Usunąć wybrane wiadomości?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">Spowoduje to trwałe usunięcie wybranej wiadomości.</item>
+    <item quantity="few">Spowoduje to trwałe usunięcie %1$d wybranych wiadomości.</item>
+    <item quantity="many">Spowoduje to trwałe usunięcie %1$d wybranych wiadomości.</item>
+    <item quantity="other">Spowoduje to trwałe usunięcie %1$d wybranych wiadomości.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">Usuwanie</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">Usuwanie wiadomości...</string>
   <string name="MediaOverviewActivity_Documents">Dokumenty</string>
@@ -592,6 +606,8 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="MediaPreviewActivity_draft">Szkic</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal wymaga pozwolenia na dostęp do danych telefonu w celu zapisu do zewnętrznego dysku, ale zostało one na stałe odrzucone. Przejdź do ustawień aplikacji, wybierz \"Uprawnienia\" i włącz \"Przechowywanie\".</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Nie można zapisać do zewnętrznego dysku bez odpowiedniego pozwolenia</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Usunąć wiadomość?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Spowoduje to trwałe usunięcie tej wiadomości.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d nowych wiadomości w %2$d rozmowach</string>
   <string name="MessageNotifier_most_recent_from_s">Najnowsza z: %1$s</string>
@@ -630,6 +646,9 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="WebRtcCallScreen_new_safety_numbers">Numer bezpieczeństwa dla konwersacji z %1$s zmienił się. To może oznaczać, że ktoś próbuje przechwycić Twoją komunikację, lub po prostu %2$s przeinstalował Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Możesz zweryfikować numer bezpieczeństwa z tym kontaktem.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Nowy numer bezpieczeństwa</string>
+  <string name="WebRtcCallScreen_accept">Akceptuj</string>
+  <string name="WebRtcCallScreen_cancel">Anuluj</string>
+  <string name="WebRtcCallScreen_end_call">Zakończ</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Dotnij, aby włączyć wideo</string>
   <!--attachment_type_selector-->
@@ -697,6 +716,12 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="audio_view__play_accessibility_description">Odtwórz</string>
   <string name="audio_view__pause_accessibility_description">Pauza</string>
   <string name="audio_view__download_accessibility_description">Pobierz</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Dźwięk</string>
+  <string name="QuoteView_video">Wideo</string>
+  <string name="QuoteView_photo">Zdjęcie</string>
+  <string name="QuoteView_document">Dokument</string>
+  <string name="QuoteView_you">Ty</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Tryb wyboru grupy</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s wybranych</string>
@@ -1038,6 +1063,7 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="conversation_context__menu_delete_message">Usuń wiadomość</string>
   <string name="conversation_context__menu_forward_message">Przekaż wiadomość</string>
   <string name="conversation_context__menu_resend_message">Wyślij ponownie wiadomość</string>
+  <string name="conversation_context__menu_reply_to_message">Odpowiedz na wiadomość</string>
   <!--conversation_context_image-->
   <string name="conversation_context_image__save_attachment">Zapisz załącznik</string>
   <!--conversation_expiring_off-->
@@ -1146,7 +1172,7 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="ExperienceUpgradeActivity_unlock_to_complete_update">Odblokuj, aby ukończyć aktualizację.</string>
   <string name="ExperienceUpgradeActivity_please_unlock_signal_to_complete_update">Odblokuj Signal, aby ukończyć aktualizację.</string>
   <string name="enter_backup_passphrase_dialog__backup_passphrase">Hasło kopii zapasowej</string>
-  <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Kopia zapasowa zostanie zapisana w pamięci zewnętrznej i zaszyfrowana za pomocą poniższego hasła. Musisz mieć to hasło, aby przywrócić kopię zapasową.</string>
+  <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Kopie zapasowe zostaną zapisane w pamięci zewnętrznej i zaszyfrowana za pomocą poniższego hasła. Musisz mieć to hasło, aby przywrócić kopię zapasową.</string>
   <string name="backup_enable_dialog__i_have_written_down_this_passphrase">Zapisałem to hasło. Bez tego nie będę mógł przywrócić kopii zapasowej.</string>
   <string name="registration_activity__restore_backup">Przywróć kopię zapasową</string>
   <string name="registration_activity__skip">Pomiń</string>
@@ -1173,6 +1199,7 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signal wymaga dostępu do pamięci urządzenia w celu utworzenia kopii zapasowych, ale uprawnienia zostały na stałe odrzucone. Przejdź do ustawień aplikacji, wybierz \"Uprawnienia\" i włącz \"Pamięć\".</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Ostatnia kopia zapasowa %s</string>
   <string name="ChatsPreferenceFragment_in_progress">W trakcie</string>
+  <string name="LocalBackupJob_creating_backup">Tworzenie kopii zapasowej...</string>
   <string name="ProgressPreference_d_messages_so_far">%d wiadomości</string>
   <string name="RegistrationActivity_verify_s">Zweryfikuj %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Wprowadź kod weryfikacyjny przesłany do %s.</string>
@@ -1220,5 +1247,6 @@ Otrzymano wiadomość wymiany klucz dla niepoprawnej wersji protokołu.</string>
   <string name="prompt_passphrase_activity__signal_is_locked">Signal jest zablokowany</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">DOTKNIJ, ABY ODBLOKOWAĆ</string>
   <string name="RegistrationLockDialog_reminder">Przypomnienie:</string>
+  <string name="recipient_preferences__about">O mnie</string>
   <!--EOF-->
 </resources>

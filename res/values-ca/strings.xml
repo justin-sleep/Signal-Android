@@ -77,6 +77,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Xats recents</string>
   <string name="ContactsCursorLoader_contacts">Contactes</string>
+  <string name="ContactsCursorLoader_groups">Grups</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Missatge %s</string>
   <string name="ContactsDatabase_signal_call_s">Trucada del Signal %s</string>
@@ -173,6 +174,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">S\'està eliminant</string>
   <string name="ConversationFragment_deleting_messages">S\'estan eliminant els missatges...</string>
+  <string name="ConversationFragment_quoted_message_not_found">No s\'ha trobat el missatge citat</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">No hi ha cap navegador instal·lat al dispositiu.</string>
   <!--ConversationListFragment-->
@@ -345,6 +347,14 @@ tornar a fer-ho provocarà la generació de missatges duplicats.</string>
   <string name="MmsDownloader_error_reading_mms_settings">S\'ha produït un error en llegir la configuració d\'MMS de l\'operador</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Multimèdia</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Voleu eliminar el missatge seleccionat?</item>
+    <item quantity="other">Voleu eliminar els missatges seleccionats?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">S\'eliminarà de manera permanent el missatge seleccionat.</item>
+    <item quantity="other">S\'eliminaran de manera permanent els %1$d missatges seleccionats.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">S\'està eliminant</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">S\'estan eliminant els missatges...</string>
   <string name="MediaOverviewActivity_Documents">Documents</string>
@@ -564,6 +574,8 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="MediaPreviewActivity_draft">Esborrany</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">El Signal necessita el permís de l\'emmagatzematge per tal de desar en un emmagatzematge extern, però s\'ha denegat permanentment. Si us plau, continueu cap al menú de configuració de l\'aplicació, seleccioneu Permisos i habiliteu-hi l\'emmagatzematge.</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">No es pot desar en un emmagatzematge extern sense permís.</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Voleu eliminar el missatge?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Aquest missatge s\'eliminarà permanentment.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d missatges nous a %2$d converses</string>
   <string name="MessageNotifier_most_recent_from_s">Més recent de: %1$s</string>
@@ -602,6 +614,9 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="WebRtcCallScreen_new_safety_numbers">El número de seguretat de la conversa amb %1$s ha canviat. Això pot significar o bé que algú està provant d\'interceptar la comunicació, o bé que %2$s ha reinstal·lat el Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Potser voleu verificar el número de seguretat amb aquest contacte.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Número de seguretat nou</string>
+  <string name="WebRtcCallScreen_accept">Accepta</string>
+  <string name="WebRtcCallScreen_cancel">Cancel·la</string>
+  <string name="WebRtcCallScreen_end_call">Finalitza la trucada</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Toqueu per activar el vídeo</string>
   <!--attachment_type_selector-->
@@ -669,6 +684,12 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="audio_view__play_accessibility_description">Reprodueix</string>
   <string name="audio_view__pause_accessibility_description">Pausa</string>
   <string name="audio_view__download_accessibility_description">Baixa</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Àudio</string>
+  <string name="QuoteView_video">Vídeo</string>
+  <string name="QuoteView_photo">Foto</string>
+  <string name="QuoteView_document">Document</string>
+  <string name="QuoteView_you">Jo</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Mode de selecció per lots</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s seleccionats</string>
@@ -745,7 +766,7 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="database_migration_activity__the_default_system_database_will_not_be_modified">La base de dades predeterminada del sistema no es modificarà ni  s\'alterarà de cap manera.</string>
   <string name="database_migration_activity__skip">Omet</string>
   <string name="database_migration_activity__import">Importa</string>
-  <string name="database_migration_activity__this_could_take_a_moment_please_be_patient">Això pot trigar una mica. Tingueu paciència, us notificarem quan la importació hagi acabat.</string>
+  <string name="database_migration_activity__this_could_take_a_moment_please_be_patient">Això pot trigar una mica. Tingueu paciència, us notificarem quan la importació hagi finalitzat.</string>
   <string name="database_migration_activity__importing">S\'ESTÀ IMPORTANT</string>
   <!--database_upgrade_activity-->
   <string name="database_upgrade_activity__updating_database">S\'està actualitzant la base de dades...</string>
@@ -778,7 +799,7 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="prompt_mms_activity__to_send_media_and_group_messages_tap_ok">Per enviar fitxers i missatges als grups, premeu «D\'acord» i completeu la configuració sol·licitada. Podeu trobar la configuració dels MMS del vostre operador telefònic si cerqueu «l\'APN del vostre operador». Només ho haureu de fer una vegada.</string>
   <!--profile_create_activity-->
   <string name="profile_create_activity__set_later">Estableix-ho més tard</string>
-  <string name="profile_create_activity__finish">ACABA</string>
+  <string name="profile_create_activity__finish">FINALITZA</string>
   <string name="profile_create_activity__who_can_see_this_information">Qui pot veure aquesta informació?</string>
   <string name="profile_create_activity__your_name">El nom</string>
   <!--recipient_preferences_activity-->
@@ -1127,10 +1148,13 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">El Signal necessita el permís de l\'emmagatzematge extern per tal de crear còpies de seguretat. Si us plau, continueu cap al menú de configuració de l\'aplicació, seleccioneu Permisos i habiliteu-hi l\'emmagatzematge.</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Darrera còpia de seguretat: %s</string>
   <string name="ChatsPreferenceFragment_in_progress">En curs</string>
+  <string name="LocalBackupJob_creating_backup">S\'està creant una còpia de seguretat...</string>
   <string name="ProgressPreference_d_messages_so_far">%d missatges fins ara...</string>
   <string name="RegistrationActivity_verify_s">Verifica %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Si us plau, escriviu el codi de verificació enviat a %s.</string>
   <string name="RegistrationActivity_wrong_number">El número no és correcte?</string>
+  <string name="RegistrationActivity_call_me_instead">Alternativament, anomena\'m</string>
+  <string name="RegistrationActivity_available_in">Disponible en:\u0020</string>
   <string name="BackupUtil_never">Mai</string>
   <string name="BackupUtil_unknown">Desconegut</string>
   <string name="prompt_passphrase_activity__unlock_signal">Desbloca el Signal</string>
@@ -1174,5 +1198,6 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="prompt_passphrase_activity__signal_is_locked">El Signal està blocat</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">TOQUEU PER A DESBLOCAR-LO</string>
   <string name="RegistrationLockDialog_reminder">Recordatori:</string>
+  <string name="recipient_preferences__about">Quant a</string>
   <!--EOF-->
 </resources>

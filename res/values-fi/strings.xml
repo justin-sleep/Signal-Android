@@ -77,6 +77,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Viimeisimmät keskustelut</string>
   <string name="ContactsCursorLoader_contacts">Yhteystiedot</string>
+  <string name="ContactsCursorLoader_groups">Ryhmät</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Viesti %s</string>
   <string name="ContactsDatabase_signal_call_s">Signal-puhelu %s</string>
@@ -173,6 +174,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">Poistetaan</string>
   <string name="ConversationFragment_deleting_messages">Viestejä poistetaan...</string>
+  <string name="ConversationFragment_quoted_message_not_found">Lainattua viestiä ei löytynyt</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">Laitteessasi ei ole verkkoselainta asennettuna.</string>
   <!--ConversationListFragment-->
@@ -343,6 +345,14 @@ seuraa niiden uudelleentuonnista viestien kaksoiskappaleita.</string>
   <string name="MmsDownloader_error_reading_mms_settings">Virhe luettaessa operaattorin MMS-asetuksia</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Media</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Poistetaanko valittu viesti?</item>
+    <item quantity="other">Poistetaanko valitut viestit?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">Tämä poistaa pysyvästi valitun viestin.</item>
+    <item quantity="other">Tämä poistaa pysyvästi kaikki %1$d valittua viestiä.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">Poistetaan</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">Viestejä poistetaan...</string>
   <string name="MediaOverviewActivity_Documents">Dokumentit</string>
@@ -562,6 +572,8 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="MediaPreviewActivity_draft">Luonnos</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal tarvitsee lupaa käyttää laitteesi tallennustilaa tallentaakseen sinne, mutta tämä käyttöoikeus on pysyvästi evätty Signalilta. Voit muuttaa tätä menemällä sovellusten asetuksiin, valitsemalla \"Sovelluksen käyttöoikeudet\" ja laittamalla päälle \"Tallennustila\".</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Tallennus ulkoiseen tallennustilaan ei onnistu ilman käyttöoikeutta.</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Poistetaanko viesti?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Tämä poistaa pysyvästi tämän viestin.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d uutta viestiä %2$d keskustelussa</string>
   <string name="MessageNotifier_most_recent_from_s">Uusin lähettäjältä: %1$s</string>
@@ -600,6 +612,9 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="WebRtcCallScreen_new_safety_numbers">Turvanumerosi yhteystiedon %1$s kanssa on vaihtunut. Tämä voi tarkoittaa joko sitä, että joku yrittää kaapata viestiliikennettänne, tai sitä, että %2$s on vain yksinkertaisesti asentanut Signalin uudelleen.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Saatat haluta varmentaa turvanumerosi tämän yhteystiedon kanssa.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Uusi turvanumero</string>
+  <string name="WebRtcCallScreen_accept">Hyväksy</string>
+  <string name="WebRtcCallScreen_cancel">Peruuta</string>
+  <string name="WebRtcCallScreen_end_call">Lopeta puhelu</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Käytä video-tilaa napsauttamalla</string>
   <!--attachment_type_selector-->
@@ -667,6 +682,12 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="audio_view__play_accessibility_description">Toista</string>
   <string name="audio_view__pause_accessibility_description">Pysäytä</string>
   <string name="audio_view__download_accessibility_description">Lataa</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Äänitallenne</string>
+  <string name="QuoteView_video">Video</string>
+  <string name="QuoteView_photo">Kuva</string>
+  <string name="QuoteView_document">Dokumentti</string>
+  <string name="QuoteView_you">Sinä</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Valitse useampi</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s valittu</string>
@@ -992,6 +1013,7 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="conversation_context__menu_delete_message">Poista viesti</string>
   <string name="conversation_context__menu_forward_message">Välitä viesti</string>
   <string name="conversation_context__menu_resend_message">Lähetä viesti uudelleen</string>
+  <string name="conversation_context__menu_reply_to_message">Vastaa viestiin</string>
   <!--conversation_context_image-->
   <string name="conversation_context_image__save_attachment">Tallenna liite</string>
   <!--conversation_expiring_off-->
@@ -1125,10 +1147,13 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signal tarvitsee lupaa käyttää laitteesi tallennustilaa varmuuskopioiden luomista varten, mutta tämä käyttöoikeus on pysyvästi evätty Signalilta. Voit muuttaa tätä menemällä sovellusten asetuksiin, valitsemalla \"Sovelluksen käyttöoikeudet\" ja laittamalla päälle \"Tallennustila\".</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Viimeksi varmuuskopioitu: %s</string>
   <string name="ChatsPreferenceFragment_in_progress">Meneillään</string>
+  <string name="LocalBackupJob_creating_backup">Luodaan varmuuskopiota...</string>
   <string name="ProgressPreference_d_messages_so_far">%d viestiä tähän mennessä</string>
   <string name="RegistrationActivity_verify_s">Vahvista %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Syötä vahvistuskoodi, joka lähetettiin numeroon %s.</string>
   <string name="RegistrationActivity_wrong_number">Väärä numero?</string>
+  <string name="RegistrationActivity_call_me_instead">Soita minulle</string>
+  <string name="RegistrationActivity_available_in">Saatavilla: </string>
   <string name="BackupUtil_never">ei koskaan</string>
   <string name="BackupUtil_unknown">Tuntematon</string>
   <string name="prompt_passphrase_activity__unlock_signal">Avaa Signalin lukitus</string>
@@ -1172,5 +1197,6 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="prompt_passphrase_activity__signal_is_locked">Signal on lukittu</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">AVAA NAPSAUTTAMALLA</string>
   <string name="RegistrationLockDialog_reminder">Muistutus:</string>
+  <string name="recipient_preferences__about">Tiedot</string>
   <!--EOF-->
 </resources>

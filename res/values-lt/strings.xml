@@ -80,6 +80,7 @@
   <!--ContactsCursorLoader-->
   <string name="ContactsCursorLoader_recent_chats">Paskiausi pokalbiai</string>
   <string name="ContactsCursorLoader_contacts">Kontaktai</string>
+  <string name="ContactsCursorLoader_groups">Grupės</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Žinutė %s</string>
   <string name="ContactsDatabase_signal_call_s">Signal skambutis %s</string>
@@ -184,6 +185,7 @@
   <string name="ConversationFragment_sms">SMS</string>
   <string name="ConversationFragment_deleting">Ištrinama</string>
   <string name="ConversationFragment_deleting_messages">Ištrinamos žinutės...</string>
+  <string name="ConversationFragment_quoted_message_not_found">Cituota žinutė nerasta</string>
   <!--ConversationListActivity-->
   <string name="ConversationListActivity_there_is_no_browser_installed_on_your_device">Jūsų įrenginyje nėra įdiegtos naršyklės.</string>
   <!--ConversationListFragment-->
@@ -364,6 +366,16 @@
   <string name="MmsDownloader_error_reading_mms_settings">Klaida, skaitant belaidžio tiekėjo MMS nustatymus</string>
   <!--MediaOverviewActivity-->
   <string name="MediaOverviewActivity_Media">Medija</string>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
+    <item quantity="one">Ištrinti pažymėtą žinutę?</item>
+    <item quantity="few">Ištrinti pažymėtas žinutes?</item>
+    <item quantity="other">Ištrinti pažymėtas žinutes?</item>
+  </plurals>
+  <plurals name="MediaOverviewActivity_Media_delete_confirm_message">
+    <item quantity="one">Tai visiems laikams ištrins %1$d pažymėtą žinutę.</item>
+    <item quantity="few">Tai visiems laikams ištrins visas %1$d pažymėtas žinutes.</item>
+    <item quantity="other">Tai visiems laikams ištrins visas %1$d pažymėtų žinučių.</item>
+  </plurals>
   <string name="MediaOverviewActivity_Media_delete_progress_title">Ištrinama</string>
   <string name="MediaOverviewActivity_Media_delete_progress_message">Ištrinamos žinutės...</string>
   <string name="MediaOverviewActivity_Documents">Dokumentai</string>
@@ -589,6 +601,8 @@
   <string name="MediaPreviewActivity_draft">Juodraštis</string>
   <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Norint įrašyti į išorinę saugyklą, Signal reikia saugyklos leidimo, tačiau jis buvo visam laikui uždraustas. Pereikite į programėlės nustatymus, pasirinkite \"Leidimai\" ir įjunkite \"Saugyklą\".</string>
   <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Nepavyksta įrašyti į išorinę saugyklą be leidimų</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_title">Ištrinti žinutę?</string>
+  <string name="MediaPreviewActivity_media_delete_confirmation_message">Tai visiems laikams ištrins šią žinutę.</string>
   <!--MessageNotifier-->
   <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d naujų(-os) žinutės(-ių) %2$d pokalbyje(-iuose)</string>
   <string name="MessageNotifier_most_recent_from_s">Paskiausia nuo: %1$s</string>
@@ -627,6 +641,9 @@
   <string name="WebRtcCallScreen_new_safety_numbers">Jūsų pokalbio su %1$s saugumo numeris pasikeitė. Tai gali reikšti, kad kažkas bando perimti jūsų susirašinėjimą arba, kad %2$s, tiesiog, iš naujo įdiegė Signal.</string>
   <string name="WebRtcCallScreen_you_may_wish_to_verify_this_contact">Jūs, tikriausiai, norėtumėte patvirtinti savo saugumo numerį su šiuo kontaktu.</string>
   <string name="WebRtcCallScreen_new_safety_number_title">Naujas saugumo numeris</string>
+  <string name="WebRtcCallScreen_accept">Priimti</string>
+  <string name="WebRtcCallScreen_cancel">Atsisakyti</string>
+  <string name="WebRtcCallScreen_end_call">Baigti skambutį</string>
   <!--WebRtcCallControls-->
   <string name="WebRtcCallControls_tap_to_enable_your_video">Bakstelėkite, norėdami įjungti savo vaizdą</string>
   <!--attachment_type_selector-->
@@ -694,6 +711,12 @@
   <string name="audio_view__play_accessibility_description">Groti</string>
   <string name="audio_view__pause_accessibility_description">Pristabdyti</string>
   <string name="audio_view__download_accessibility_description">Atsisiųsti</string>
+  <!--QuoteView-->
+  <string name="QuoteView_audio">Garso įrašai</string>
+  <string name="QuoteView_video">Vaizdo įrašai</string>
+  <string name="QuoteView_photo">Nuotrauka</string>
+  <string name="QuoteView_document">Dokumentas</string>
+  <string name="QuoteView_you">Jūs</string>
   <!--conversation_fragment_cab-->
   <string name="conversation_fragment_cab__batch_selection_mode">Masinio pasirinkimo veiksena</string>
   <string name="conversation_fragment_cab__batch_selection_amount">%s pasirinkta</string>
@@ -1027,6 +1050,7 @@
   <string name="conversation_context__menu_delete_message">Ištrinti žinutę</string>
   <string name="conversation_context__menu_forward_message">Persiųsti žinutę</string>
   <string name="conversation_context__menu_resend_message">Iš naujo siųsti žinutę</string>
+  <string name="conversation_context__menu_reply_to_message">Atsakyti į žinutę</string>
   <!--conversation_context_image-->
   <string name="conversation_context_image__save_attachment">Įrašyti priedą</string>
   <!--conversation_expiring_off-->
@@ -1161,10 +1185,13 @@
   <string name="ChatsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Norint daryti atsargines kopijas, Signal reikia išorinės saugyklos leidimo, tačiau jis buvo visam laikui uždraustas. Pereikite į programėlės nustatymus, pasirinkite \"Leidimai\" ir įjunkite \"Saugyklą\".</string>
   <string name="ChatsPreferenceFragment_last_backup_s">Paskiausia atsarginė kopija: %s</string>
   <string name="ChatsPreferenceFragment_in_progress">Eigoje</string>
+  <string name="LocalBackupJob_creating_backup">Daroma atsarginė kopija...</string>
   <string name="ProgressPreference_d_messages_so_far">Jau %d žinučių</string>
   <string name="RegistrationActivity_verify_s">Patvirtinti %s</string>
   <string name="RegistrationActivity_please_enter_the_verification_code_sent_to_s">Įveskite į %s išsiųstą patvirtinimo kodą.</string>
   <string name="RegistrationActivity_wrong_number">Neteisingas numeris?</string>
+  <string name="RegistrationActivity_call_me_instead">Vietoj to man skambinti</string>
+  <string name="RegistrationActivity_available_in">Prieinama po:\u0020</string>
   <string name="BackupUtil_never">Niekada</string>
   <string name="BackupUtil_unknown">Nežinoma</string>
   <string name="prompt_passphrase_activity__unlock_signal">Atrakinti Signal</string>
@@ -1208,5 +1235,6 @@
   <string name="prompt_passphrase_activity__signal_is_locked">Signal yra užrakinta</string>
   <string name="prompt_passphrase_activity__tap_to_unlock">BAKSTELĖKITE, NORĖDAMI ATRAKINTI</string>
   <string name="RegistrationLockDialog_reminder">Priminimas:</string>
+  <string name="recipient_preferences__about">Apie</string>
   <!--EOF-->
 </resources>
