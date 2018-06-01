@@ -65,7 +65,7 @@ public class LocalBackupJob extends ContextJob {
         throw new IOException("Backup password is null");
       }
 
-      File tempFile = File.createTempFile("backup", "tmp", context.getExternalCacheDir());
+      File tempFile = File.createTempFile("backup", "tmp", StorageUtil.getBackupCacheDirectory(context));
 
       FullBackupExporter.export(context,
                                 AttachmentSecretProvider.getInstance(context).getOrCreateAttachmentSecret(),
