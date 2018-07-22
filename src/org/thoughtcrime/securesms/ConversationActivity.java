@@ -429,13 +429,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       setMedia(data.getData(), MediaType.AUDIO);
       break;
     case PICK_CONTACT:
-      // TODO(greyson): Re-enable shared contact sending after receiving has been enabled for a few releases
-      addAttachmentContactInfo(data.getData());
-//      if (isSecureText && !isSmsForced()) {
-//        openContactShareEditor(data.getData());
-//      } else {
-//        addAttachmentContactInfo(data.getData());
-//      }
+      if (isSecureText && !isSmsForced()) {
+        openContactShareEditor(data.getData());
+      } else {
+        addAttachmentContactInfo(data.getData());
+      }
       break;
     case GET_CONTACT_DETAILS:
       sendSharedContact(data.getParcelableArrayListExtra(ContactShareEditActivity.KEY_CONTACTS));
@@ -1242,17 +1240,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     inputPanel            = ViewUtil.findById(this, R.id.bottom_panel);
 
     ImageButton quickCameraToggle = ViewUtil.findById(this, R.id.quick_camera_toggle);
-    View        composeBubble     = ViewUtil.findById(this, R.id.compose_bubble);
 
     container.addOnKeyboardShownListener(this);
     inputPanel.setListener(this);
     inputPanel.setMediaListener(this);
-
-    int[]      attributes   = new int[]{R.attr.conversation_item_bubble_background};
-    TypedArray colors       = obtainStyledAttributes(attributes);
-    int        defaultColor = colors.getColor(0, Color.WHITE);
-    composeBubble.getBackground().setColorFilter(defaultColor, PorterDuff.Mode.MULTIPLY);
-    colors.recycle();
 
     attachmentTypeSelector = null;
     attachmentManager      = new AttachmentManager(this, this);
@@ -1400,13 +1391,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   private void setMedia(@Nullable Uri uri, @NonNull MediaType mediaType, int width, int height) {
     if (uri == null) return;
 
-    // TODO(greyson): Re-enable shared contact sending after receiving has been enabled for a few releases
-    attachmentManager.setMedia(glideRequests, uri, mediaType, getCurrentMediaConstraints(), width, height);
-//    if (MediaType.VCARD.equals(mediaType) && isSecureText) {
-//      openContactShareEditor(uri);
-//    } else {
-//      attachmentManager.setMedia(glideRequests, uri, mediaType, getCurrentMediaConstraints(), width, height);
-//    }
+    if (MediaType.VCARD.equals(mediaType) && isSecureText) {
+      openContactShareEditor(uri);
+    } else {
+      attachmentManager.setMedia(glideRequests, uri, mediaType, getCurrentMediaConstraints(), width, height);
+    }
   }
 
   private void openContactShareEditor(Uri contactUri) {

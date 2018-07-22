@@ -120,9 +120,6 @@
     <activity android:name=".CountrySelectionActivity"
               android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
 
-    <activity android:name=".ImportExportActivity"
-              android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"/>
-
     <activity android:name=".InviteActivity"
               android:theme="@style/TextSecure.HighlightTheme"
               android:windowSoftInputMode="stateHidden"
@@ -196,9 +193,9 @@
         </intent-filter>
 
         <meta-data android:name="com.sec.minimode.icon.portrait.normal"
-            android:resource="@drawable/icon" />
+                   android:resource="@mipmap/ic_launcher" />
         <meta-data android:name="com.sec.minimode.icon.landscape.normal"
-            android:resource="@drawable/icon" />
+                   android:resource="@mipmap/ic_launcher" />
 
     </activity-alias>
 
