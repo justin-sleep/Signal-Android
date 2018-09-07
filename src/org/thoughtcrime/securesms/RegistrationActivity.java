@@ -25,7 +25,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
+import org.thoughtcrime.securesms.logging.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -69,6 +69,7 @@ import org.thoughtcrime.securesms.database.NoExternalStorageException;
 import org.thoughtcrime.securesms.jobs.DirectoryRefreshJob;
 import org.thoughtcrime.securesms.jobs.GcmRefreshJob;
 import org.thoughtcrime.securesms.lock.RegistrationLockReminders;
+import org.thoughtcrime.securesms.notifications.NotificationChannels;
 import org.thoughtcrime.securesms.permissions.Permissions;
 import org.thoughtcrime.securesms.push.AccountManagerFactory;
 import org.thoughtcrime.securesms.service.DirectoryRefreshListener;
@@ -378,6 +379,7 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
                                               database, backup.getFile(), passphrase);
 
                 DatabaseFactory.upgradeRestored(context, database);
+                NotificationChannels.restoreContactNotificationChannels(context);
 
                 TextSecurePreferences.setBackupEnabled(context, true);
                 TextSecurePreferences.setBackupPassphrase(context, passphrase);
@@ -486,7 +488,9 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
 
           return new Pair<>(password, gcmToken);
         } catch (IOException e) {
-          Log.w(TAG, e);
+          Log.w(TAG, "Error during account registration", e);
+          createButton.setIndeterminateProgressMode(false);
+          createButton.setProgress(0);
           return null;
         }
       }
@@ -1006,7 +1010,7 @@ public class RegistrationActivity extends BaseActionBarActivity implements Verif
   private class ChallengeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      Log.w(TAG, "Got a challenge broadcast...");
+      Log.i(TAG, "Got a challenge broadcast...");
       handleChallengeReceived(intent.getStringExtra(CHALLENGE_EXTRA));
     }
   }
