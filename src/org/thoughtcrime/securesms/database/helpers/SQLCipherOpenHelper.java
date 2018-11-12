@@ -56,8 +56,9 @@ public class SQLCipherOpenHelper extends SQLiteOpenHelper {
   private static final int BAD_IMPORT_CLEANUP               = 10;
   private static final int QUOTE_MISSING                    = 11;
   private static final int NOTIFICATION_CHANNELS            = 12;
+  private static final int SECRET_SENDER                    = 13;
 
-  private static final int    DATABASE_VERSION = 12;
+  private static final int    DATABASE_VERSION = 13;
   private static final String DATABASE_NAME    = "signal.db";
 
   private final Context        context;
@@ -241,11 +242,13 @@ public class SQLCipherOpenHelper extends SQLiteOpenHelper {
         }
       }
 
-      if (oldVersion < QUOTE_MISSING) {
+      // Note: This column only being checked due to upgrade issues as described in #8184
+      if (oldVersion < QUOTE_MISSING && !columnExists(db, "mms", "quote_missing")) {
         db.execSQL("ALTER TABLE mms ADD COLUMN quote_missing INTEGER DEFAULT 0");
       }
 
-      if (oldVersion < NOTIFICATION_CHANNELS) {
+      // Note: The column only being checked due to upgrade issues as described in #8184
+      if (oldVersion < NOTIFICATION_CHANNELS && !columnExists(db, "recipient_preferences", "notification_channel")) {
         db.execSQL("ALTER TABLE recipient_preferences ADD COLUMN notification_channel TEXT DEFAULT NULL");
         NotificationChannels.create(context);
 
@@ -282,6 +285,15 @@ public class SQLCipherOpenHelper extends SQLiteOpenHelper {
         }
       }
 
+      if (oldVersion < SECRET_SENDER) {
+        db.execSQL("ALTER TABLE recipient_preferences ADD COLUMN unidentified_access_mode INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE push ADD COLUMN server_timestamp INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE push ADD COLUMN server_guid TEXT DEFAULT NULL");
+        db.execSQL("ALTER TABLE group_receipts ADD COLUMN unidentified INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE mms ADD COLUMN unidentified INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE sms ADD COLUMN unidentified INTEGER DEFAULT 0");
+      }
+
       db.setTransactionSuccessful();
     } finally {
       db.endTransaction();
@@ -309,5 +321,19 @@ public class SQLCipherOpenHelper extends SQLiteOpenHelper {
       db.execSQL(statement);
   }
 
+  private static boolean columnExists(@NonNull SQLiteDatabase db, @NonNull String table, @NonNull String column) {
+    try (Cursor cursor = db.rawQuery("PRAGMA table_info(" + table + ")", null)) {
+      int nameColumnIndex = cursor.getColumnIndexOrThrow("name");
 
+      while (cursor.moveToNext()) {
+        String name = cursor.getString(nameColumnIndex);
+
+        if (name.equals(column)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
 }

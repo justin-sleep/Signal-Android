@@ -98,7 +98,11 @@ public class FullBackupImporter extends FullBackupBase {
     EventBus.getDefault().post(new BackupEvent(BackupEvent.Type.FINISHED, count));
   }
 
-  private static void processVersion(@NonNull SQLiteDatabase db, DatabaseVersion version) {
+  private static void processVersion(@NonNull SQLiteDatabase db, DatabaseVersion version) throws IOException {
+    if (version.getVersion() > db.getVersion()) {
+      throw new DatabaseDowngradeException(db.getVersion(), version.getVersion());
+    }
+
     db.setVersion(version.getVersion());
   }
 
@@ -279,7 +283,7 @@ public class FullBackupImporter extends FullBackupBase {
 
         out.close();
 
-        byte[] ourMac   = mac.doFinal();
+        byte[] ourMac   = ByteUtil.trim(mac.doFinal(), 10);
         byte[] theirMac = new byte[10];
 
         try {
@@ -289,7 +293,7 @@ public class FullBackupImporter extends FullBackupBase {
           throw new IOException(e);
         }
 
-        if (MessageDigest.isEqual(ourMac, theirMac)) {
+        if (!MessageDigest.isEqual(ourMac, theirMac)) {
           //destination.delete();
           throw new IOException("Bad MAC");
         }
@@ -310,9 +314,9 @@ public class FullBackupImporter extends FullBackupBase {
         System.arraycopy(frame, frame.length - 10, theirMac, 0, theirMac.length);
 
         mac.update(frame, 0, frame.length - 10);
-        byte[] ourMac = mac.doFinal();
+        byte[] ourMac = ByteUtil.trim(mac.doFinal(), 10);
 
-        if (MessageDigest.isEqual(ourMac, theirMac)) {
+        if (!MessageDigest.isEqual(ourMac, theirMac)) {
           throw new IOException("Bad MAC");
         }
 
@@ -328,4 +332,9 @@ public class FullBackupImporter extends FullBackupBase {
     }
   }
 
+  public static class DatabaseDowngradeException extends IOException {
+    DatabaseDowngradeException(int currentVersion, int backupVersion) {
+      super("Tried to import a backup with version " + backupVersion + " into a database with version " + currentVersion);
+    }
+  }
 }
